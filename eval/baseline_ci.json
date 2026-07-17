@@ -1,0 +1,17 @@
+{
+  "seeds": "100-149",
+  "n_sets": 50,
+  "n_entries": 40,
+  "note": "deterministic offline held-out run; CI regenerates and compares",
+  "aggregates": {
+    "pair_precision": 1.0,
+    "pair_recall": 0.9541071017603525,
+    "pair_f1": 0.9762336616835532,
+    "auto_match_rate": 0.9541071017603525,
+    "auto_match_precision": 1.0,
+    "break_precision": 0.7313150966680378,
+    "break_recall": 0.9771926961926962,
+    "break_f1": 0.8271159673659674,
+    "engine_match_rate": 0.8415
+  }
+}

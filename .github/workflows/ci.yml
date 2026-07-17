@@ -1,0 +1,15 @@
+name: ci
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv sync --dev
+      - run: uv run pytest -v
+      - run: uv run ruff check
+      - name: eval regression gate (deterministic, offline)
+        run: |
+          uv run python -m eval.run_eval --seeds 100-149 --out /tmp/ci_eval
+          uv run python -m eval.compare /tmp/ci_eval/*.json eval/baseline_ci.json
