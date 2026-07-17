@@ -1,0 +1,359 @@
+{
+  "matches": [
+    {
+      "entry_id": "E0001",
+      "line_ids": [
+        "S0001"
+      ],
+      "tier": 1,
+      "confidence": 0.95
+    },
+    {
+      "entry_id": "E0002",
+      "line_ids": [
+        "S0002"
+      ],
+      "tier": 1,
+      "confidence": 0.95
+    },
+    {
+      "entry_id": "E0003",
+      "line_ids": [
+        "S0003"
+      ],
+      "tier": 1,
+      "confidence": 0.95
+    },
+    {
+      "entry_id": "E0004",
+      "line_ids": [
+        "S0004"
+      ],
+      "tier": 1,
+      "confidence": 0.95
+    },
+    {
+      "entry_id": "E0005",
+      "line_ids": [
+        "S0005"
+      ],
+      "tier": 1,
+      "confidence": 0.95
+    },
+    {
+      "entry_id": "E0006",
+      "line_ids": [
+        "S0006"
+      ],
+      "tier": 1,
+      "confidence": 0.95
+    },
+    {
+      "entry_id": "E0007",
+      "line_ids": [
+        "S0007"
+      ],
+      "tier": 1,
+      "confidence": 0.95
+    },
+    {
+      "entry_id": "E0008",
+      "line_ids": [
+        "S0008"
+      ],
+      "tier": 2,
+      "confidence": 0.7557692307692307
+    },
+    {
+      "entry_id": "E0010",
+      "line_ids": [
+        "S0010"
+      ],
+      "tier": 2,
+      "confidence": 0.753
+    },
+    {
+      "entry_id": "E0011",
+      "line_ids": [
+        "S0011"
+      ],
+      "tier": 1,
+      "confidence": 0.95
+    },
+    {
+      "entry_id": "E0012",
+      "line_ids": [
+        "S0012"
+      ],
+      "tier": 1,
+      "confidence": 0.95
+    },
+    {
+      "entry_id": "E0013",
+      "line_ids": [
+        "S0013"
+      ],
+      "tier": 1,
+      "confidence": 0.95
+    },
+    {
+      "entry_id": "E0014",
+      "line_ids": [
+        "S0014"
+      ],
+      "tier": 1,
+      "confidence": 0.95
+    },
+    {
+      "entry_id": "E0015",
+      "line_ids": [
+        "S0015"
+      ],
+      "tier": 1,
+      "confidence": 0.95
+    },
+    {
+      "entry_id": "E0016",
+      "line_ids": [
+        "S0016"
+      ],
+      "tier": 1,
+      "confidence": 0.95
+    },
+    {
+      "entry_id": "E0017",
+      "line_ids": [
+        "S0017"
+      ],
+      "tier": 1,
+      "confidence": 0.95
+    },
+    {
+      "entry_id": "E0018",
+      "line_ids": [
+        "S0018",
+        "S0019"
+      ],
+      "tier": 3,
+      "confidence": 0.6536363636363637
+    },
+    {
+      "entry_id": "E0020",
+      "line_ids": [
+        "S0020"
+      ],
+      "tier": 1,
+      "confidence": 0.95
+    },
+    {
+      "entry_id": "E0021",
+      "line_ids": [
+        "S0021"
+      ],
+      "tier": 1,
+      "confidence": 0.95
+    },
+    {
+      "entry_id": "E0022",
+      "line_ids": [
+        "S0022",
+        "S0023"
+      ],
+      "tier": 3,
+      "confidence": 0.6625000000000001
+    },
+    {
+      "entry_id": "E0023",
+      "line_ids": [
+        "S0024"
+      ],
+      "tier": 1,
+      "confidence": 0.95
+    },
+    {
+      "entry_id": "E0024",
+      "line_ids": [
+        "S0025"
+      ],
+      "tier": 1,
+      "confidence": 0.95
+    },
+    {
+      "entry_id": "E0025",
+      "line_ids": [
+        "S0026"
+      ],
+      "tier": 1,
+      "confidence": 0.95
+    },
+    {
+      "entry_id": "E0026",
+      "line_ids": [
+        "S0027"
+      ],
+      "tier": 1,
+      "confidence": 0.95
+    },
+    {
+      "entry_id": "E0027",
+      "line_ids": [
+        "S0028"
+      ],
+      "tier": 1,
+      "confidence": 0.95
+    },
+    {
+      "entry_id": "E0028",
+      "line_ids": [
+        "S0029"
+      ],
+      "tier": 1,
+      "confidence": 0.95
+    },
+    {
+      "entry_id": "E0029",
+      "line_ids": [
+        "S0030"
+      ],
+      "tier": 2,
+      "confidence": 0.6749999999999999
+    },
+    {
+      "entry_id": "E0030",
+      "line_ids": [
+        "S0031"
+      ],
+      "tier": 1,
+      "confidence": 0.95
+    },
+    {
+      "entry_id": "E0031",
+      "line_ids": [
+        "S0032"
+      ],
+      "tier": 1,
+      "confidence": 0.95
+    },
+    {
+      "entry_id": "E0032",
+      "line_ids": [
+        "S0033"
+      ],
+      "tier": 1,
+      "confidence": 0.95
+    },
+    {
+      "entry_id": "E0033",
+      "line_ids": [
+        "S0034"
+      ],
+      "tier": 1,
+      "confidence": 0.95
+    },
+    {
+      "entry_id": "E0034",
+      "line_ids": [
+        "S0035"
+      ],
+      "tier": 1,
+      "confidence": 0.95
+    },
+    {
+      "entry_id": "E0037",
+      "line_ids": [
+        "S0036"
+      ],
+      "tier": 1,
+      "confidence": 0.95
+    },
+    {
+      "entry_id": "E0038",
+      "line_ids": [
+        "S0037"
+      ],
+      "tier": 1,
+      "confidence": 0.95
+    },
+    {
+      "entry_id": "E0039",
+      "line_ids": [
+        "S0038"
+      ],
+      "tier": 1,
+      "confidence": 0.95
+    },
+    {
+      "entry_id": "E0040",
+      "line_ids": [
+        "S0039"
+      ],
+      "tier": 1,
+      "confidence": 0.95
+    }
+  ],
+  "breaks": [
+    {
+      "side": "ledger",
+      "record_id": "E0009",
+      "category": "amount_mismatch_suspect",
+      "suggestion": "amounts disagree: ledger -683254.55 vs statement -682354.55 — check for a keying error or an absorbed fee",
+      "related_id": "S0009"
+    },
+    {
+      "side": "statement",
+      "record_id": "S0009",
+      "category": "amount_mismatch_suspect",
+      "suggestion": "amounts disagree: ledger -683254.55 vs statement -682354.55 — check for a keying error or an absorbed fee",
+      "related_id": "E0009"
+    },
+    {
+      "side": "statement",
+      "record_id": "S0042",
+      "category": "duplicate_suspect",
+      "suggestion": "identical to matched line S0020 — possible double presentation",
+      "related_id": "S0020"
+    },
+    {
+      "side": "statement",
+      "record_id": "S0040",
+      "category": "missing_in_ledger",
+      "suggestion": "no ledger entry for -200.51 on 2026-03-14 — record it (bank fees and interest are the usual culprits)",
+      "related_id": null
+    },
+    {
+      "side": "statement",
+      "record_id": "S0041",
+      "category": "missing_in_ledger",
+      "suggestion": "no ledger entry for -183.42 on 2026-03-02 — record it (bank fees and interest are the usual culprits)",
+      "related_id": null
+    },
+    {
+      "side": "ledger",
+      "record_id": "E0019",
+      "category": "missing_in_statement",
+      "suggestion": "ledger expects -409613.34 around 2026-03-03 but the bank never saw it — payment may have failed or is still in transit",
+      "related_id": null
+    },
+    {
+      "side": "ledger",
+      "record_id": "E0035",
+      "category": "missing_in_statement",
+      "suggestion": "ledger expects -126036.8 around 2026-03-12 but the bank never saw it — payment may have failed or is still in transit",
+      "related_id": null
+    },
+    {
+      "side": "ledger",
+      "record_id": "E0036",
+      "category": "missing_in_statement",
+      "suggestion": "ledger expects -92655.2 around 2026-03-12 but the bank never saw it — payment may have failed or is still in transit",
+      "related_id": null
+    }
+  ],
+  "summary": {
+    "n_entries": 40,
+    "n_lines": 42,
+    "n_matched_entries": 36,
+    "match_rate": 0.9,
+    "n_breaks": 8
+  }
+}
