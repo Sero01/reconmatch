@@ -3,7 +3,7 @@
 Everything below is the only remaining work on Artifact 3. Code is complete:
 45 tests green, ruff clean, Gradio app verified end-to-end (2026-07-18).
 
-## 1. Create the GitHub repo and push (~2 min)
+## 1. Create the GitHub repo and push (~2 min) — ✅ DONE 2026-07-18, CI green
 
 ```bash
 cd ~/Projects/reconmatch
