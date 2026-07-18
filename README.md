@@ -6,6 +6,9 @@ produced it, and classify every unmatched item as a **break** with a resolution
 hint. The matcher is deterministic — same inputs, same output, zero inference
 cost — so its numbers are reproducible and its decisions are auditable.
 
+Live demo: **[reconmatch-aa9c.onrender.com](https://reconmatch-aa9c.onrender.com)**
+(free tier — allow ~1 min cold start after idle).
+
 ## Results (held-out, 50 synthetic sets, seeds 100–149, never tuned on)
 
 | Metric | Value |
@@ -97,4 +100,5 @@ push and fails the build on any regression beyond a 0.01 tolerance against
 ## Deploy
 
 Dockerized Gradio app (`Dockerfile` + `render.yaml`), same shape as DocVal.
-Live URL lands here once the repo is pushed and the Render service is created.
+Live at [reconmatch-aa9c.onrender.com](https://reconmatch-aa9c.onrender.com)
+(Render free tier; sample + upload flows verified in production 2026-07-18).

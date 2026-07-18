@@ -15,7 +15,7 @@ gh repo create Sero01/reconmatch --public --source=. --push
 CI (`.github/workflows/ci.yml`) is fully offline/deterministic — no secrets or
 env vars needed. It should go green on the first push.
 
-## 2. Create the Render service (~3 min)
+## 2. Create the Render service (~3 min) — ✅ DONE 2026-07-18: https://reconmatch-aa9c.onrender.com
 
 Same flow as DocVal (docval-yy4s):
 
@@ -26,8 +26,8 @@ Same flow as DocVal (docval-yy4s):
    ~15 min idle (~1 min wake), and during rollouts two backends alternate
    404/200 — wait it out before judging health.
 
-## 3. Tell Claude the URL
+## 3. Tell Claude the URL — ✅ DONE 2026-07-18
 
-Once the service is live, paste the URL into a Claude session — remaining
-follow-ups (add live URL to README + DocVal cross-link, verify production
-sample + upload flows) are queued and can run unattended.
+URL recorded in README + DocVal cross-link; production sample + upload flows
+verified via gradio_client (36/40 auto-matched on the bundled sample).
+Checklist complete — Artifact 3 is shipped.
