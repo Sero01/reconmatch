@@ -3,3 +3,14 @@ __pycache__/
 *.pyc
 eval/results/
 .env
+
+# BenchRec licensed dataset (CC BY 4.0) — raw data must never be committed.
+# Versioned experiment code lives in experiments/benchrec/; only the raw
+# dataset and generated artifacts live under data/benchrec/.
+data/benchrec/*.csv
+data/benchrec/*.zip
+data/benchrec/*.log
+# Per-candidate evidence dumps contain raw licensed attribute text (regenerable).
+# Aggregate *.md artifacts are safe to track.
+data/benchrec/artifacts/*.csv
+data/benchrec/artifacts/*.parquet
