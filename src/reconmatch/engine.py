@@ -46,10 +46,10 @@ def _tier1(entry: LedgerEntry, line: StatementLine,
     if entry.amount != line.amount or entry.date != line.date:
         return None
     if entry.reference is not None and entry.reference == line.reference:
-        return MatchPair(entry_id=entry.entry_id, line_ids=[line.line_id],
+        return MatchPair(entry_ids=[entry.entry_id], line_ids=[line.line_id],
                          tier=1, confidence=1.0)
     if desc_sim(entry.description, line.description) >= config.desc_threshold:
-        return MatchPair(entry_id=entry.entry_id, line_ids=[line.line_id],
+        return MatchPair(entry_ids=[entry.entry_id], line_ids=[line.line_id],
                          tier=1, confidence=0.95)
     return None
 
@@ -63,7 +63,7 @@ def _tier2(entry: LedgerEntry, line: StatementLine,
     if sim < config.desc_threshold:
         return None
     confidence = 0.6 + 0.3 * sim * (1 - gap / (config.date_window_days + 1))
-    return MatchPair(entry_id=entry.entry_id, line_ids=[line.line_id],
+    return MatchPair(entry_ids=[entry.entry_id], line_ids=[line.line_id],
                      tier=2, confidence=confidence)
 
 
@@ -82,7 +82,7 @@ def _tier3(entry: LedgerEntry, lines: list[StatementLine],
             sims = [desc_sim(entry.description, c.description) for c in combo]
             confidence = 0.55 + 0.15 * (sum(sims) / len(sims)) - 0.05 * (k - 2)
             out.append(MatchPair(
-                entry_id=entry.entry_id,
+                entry_ids=[entry.entry_id],
                 line_ids=sorted(c.line_id for c in combo),
                 tier=3, confidence=confidence))
     return out
@@ -101,16 +101,16 @@ def match(ledger: list[LedgerEntry], lines: list[StatementLine],
                     candidates.append(pair)
         candidates.extend(_tier3(entry, lines, config))
 
-    candidates.sort(key=lambda m: (-m.confidence, m.tier, m.entry_id,
+    candidates.sort(key=lambda m: (-m.confidence, m.tier, tuple(m.entry_ids),
                                    tuple(m.line_ids)))
     used_entries: set[str] = set()
     used_lines: set[str] = set()
     accepted: list[MatchPair] = []
     for cand in candidates:
-        if cand.entry_id in used_entries or used_lines & set(cand.line_ids):
+        if used_entries & set(cand.entry_ids) or used_lines & set(cand.line_ids):
             continue
-        used_entries.add(cand.entry_id)
+        used_entries.update(cand.entry_ids)
         used_lines.update(cand.line_ids)
         accepted.append(cand)
-    accepted.sort(key=lambda m: m.entry_id)
+    accepted.sort(key=lambda m: tuple(m.entry_ids))
     return accepted

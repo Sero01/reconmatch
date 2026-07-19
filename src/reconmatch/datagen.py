@@ -28,7 +28,7 @@ _PREFIXES = ["POS ", "NEFT ", "IMPS ", "ACH ", ""]
 
 
 class TruthPair(BaseModel):
-    entry_id: str
+    entry_ids: list[str]
     line_ids: list[str]
 
 
@@ -107,17 +107,17 @@ def generate_pair(rng: random.Random, n_entries: int = 40,
         roll = rng.random()
         if roll < 0.70:  # clean same-day 1:1
             line = new_line(d, desc, amount)
-            pairs.append(TruthPair(entry_id=entry.entry_id,
+            pairs.append(TruthPair(entry_ids=[entry.entry_id],
                                    line_ids=[line.line_id]))
         elif roll < 0.80:  # settles 1-3 days later
             line = new_line(d + timedelta(days=rng.randint(1, 3)), desc, amount)
-            pairs.append(TruthPair(entry_id=entry.entry_id,
+            pairs.append(TruthPair(entry_ids=[entry.entry_id],
                                    line_ids=[line.line_id]))
         elif roll < 0.88:  # split payment
             k = rng.randint(2, 3)
             ids = [new_line(d, desc, part).line_id
                    for part in _split(rng, amount, k)]
-            pairs.append(TruthPair(entry_id=entry.entry_id, line_ids=ids))
+            pairs.append(TruthPair(entry_ids=[entry.entry_id], line_ids=ids))
         elif roll < 0.92:  # statement amount keyed wrong
             line = new_line(d, desc, _typo(rng, amount))
             breaks.append(Break(side="ledger", record_id=entry.entry_id,

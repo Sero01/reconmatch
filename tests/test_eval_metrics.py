@@ -7,15 +7,15 @@ from eval.metrics import auto_match_rate, break_prf, pair_prf
 def _truth():
     return Truth(
         pairs=[
-            TruthPair(entry_id="E1", line_ids=["S1"]),
-            TruthPair(entry_id="E2", line_ids=["S2", "S3"]),
+            TruthPair(entry_ids=["E1"], line_ids=["S1"]),
+            TruthPair(entry_ids=["E2"], line_ids=["S2", "S3"]),
         ],
         breaks=[],
     )
 
 
 def _pair(entry_id, line_ids, confidence, tier=1):
-    return MatchPair(entry_id=entry_id, line_ids=line_ids, tier=tier,
+    return MatchPair(entry_ids=[entry_id], line_ids=line_ids, tier=tier,
                      confidence=confidence)
 
 
@@ -60,9 +60,11 @@ def test_returned_threshold_actually_achieves_floor():
     ]
     truth = _truth()
     r = auto_match_rate(pred, truth, precision_floor=0.99)
-    gold = {(p.entry_id, tuple(sorted(p.line_ids))) for p in truth.pairs}
+    gold = {(tuple(sorted(p.entry_ids)), tuple(sorted(p.line_ids)))
+            for p in truth.pairs}
     accepted = [m for m in pred if m.confidence >= r["threshold"]]
-    correct = sum((m.entry_id, tuple(sorted(m.line_ids))) in gold for m in accepted)
+    correct = sum((tuple(sorted(m.entry_ids)), tuple(sorted(m.line_ids))) in gold
+                  for m in accepted)
     precision = correct / len(accepted) if accepted else 1.0
     assert precision >= 0.99
 

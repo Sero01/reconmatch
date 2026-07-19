@@ -45,7 +45,7 @@ def test_missing_column_reports_clearly(tmp_path):
 
 
 def test_models_construct():
-    m = MatchPair(entry_id="E1", line_ids=["S1", "S2"], tier=3, confidence=0.61)
+    m = MatchPair(entry_ids=["E1"], line_ids=["S1", "S2"], tier=3, confidence=0.61)
     b = Break(side="statement", record_id="S9", category="missing_in_ledger",
               suggestion="record this statement line in the ledger")
     r = ReconReport(matches=[m], breaks=[b], summary={"match_rate": 0.9})

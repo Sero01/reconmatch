@@ -31,7 +31,7 @@ def _near_miss(entry: LedgerEntry, line: StatementLine,
 def classify_breaks(ledger: list[LedgerEntry], lines: list[StatementLine],
                     matches: list[MatchPair],
                     config: MatchConfig) -> list[Break]:
-    matched_entries = {m.entry_id for m in matches}
+    matched_entries = {eid for m in matches for eid in m.entry_ids}
     matched_lines = {i for m in matches for i in m.line_ids}
     open_entries = [e for e in ledger if e.entry_id not in matched_entries]
     open_lines = [s for s in lines if s.line_id not in matched_lines]
@@ -99,7 +99,7 @@ def reconcile(ledger: list[LedgerEntry], lines: list[StatementLine],
               config: MatchConfig = MatchConfig()) -> ReconReport:
     matches = match(ledger, lines, config)
     breaks = classify_breaks(ledger, lines, matches, config)
-    n_matched = len({m.entry_id for m in matches})
+    n_matched = len({eid for m in matches for eid in m.entry_ids})
     summary = {
         "n_entries": len(ledger),
         "n_lines": len(lines),

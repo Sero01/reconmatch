@@ -111,8 +111,10 @@ def test_tier1_wins_lines_from_split_candidates():
 
 def test_engine_precision_floor_on_generated_data():
     ledger, lines, truth = generate_pair(random.Random(42), n_entries=60)
-    pred = {(m.entry_id, tuple(sorted(m.line_ids))) for m in match(ledger, lines)}
-    gold = {(p.entry_id, tuple(sorted(p.line_ids))) for p in truth.pairs}
+    pred = {(tuple(sorted(m.entry_ids)), tuple(sorted(m.line_ids)))
+            for m in match(ledger, lines)}
+    gold = {(tuple(sorted(p.entry_ids)), tuple(sorted(p.line_ids)))
+            for p in truth.pairs}
     assert pred, "engine matched nothing"
     precision = len(pred & gold) / len(pred)
     assert precision >= 0.95, precision

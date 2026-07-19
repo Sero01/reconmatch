@@ -6,7 +6,7 @@ from reconmatch.schema import load_ledger_csv, load_statement_csv
 
 def test_truth_accounts_for_every_ledger_entry():
     ledger, lines, truth = generate_pair(random.Random(7))
-    matched = {p.entry_id for p in truth.pairs}
+    matched = {i for p in truth.pairs for i in p.entry_ids}
     broken = {b.record_id for b in truth.breaks if b.side == "ledger"}
     assert matched | broken == {e.entry_id for e in ledger}
     assert matched.isdisjoint(broken)
@@ -19,13 +19,14 @@ def test_truth_accounts_for_every_statement_line():
     assert in_pairs | broken == {line.line_id for line in lines}
 
 
-def test_split_lines_sum_exactly():
+def test_pair_amounts_balance_exactly():
     ledger, lines, truth = generate_pair(random.Random(7))
     by_id = {line.line_id: line for line in lines}
     entries = {e.entry_id: e for e in ledger}
     for p in truth.pairs:
-        total = sum(by_id[i].amount for i in p.line_ids)
-        assert total == entries[p.entry_id].amount, p.entry_id
+        total_lines = sum(by_id[i].amount for i in p.line_ids)
+        total_entries = sum(entries[i].amount for i in p.entry_ids)
+        assert total_lines == total_entries, p
 
 
 def test_perturbations_all_present_at_scale():

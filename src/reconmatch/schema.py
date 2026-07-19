@@ -34,7 +34,7 @@ class StatementLine(BaseModel):
 
 
 class MatchPair(BaseModel):
-    entry_id: str
+    entry_ids: list[str]
     line_ids: list[str]
     tier: int
     confidence: float

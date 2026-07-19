@@ -22,11 +22,12 @@ def _prf(pred: set, gold: set) -> dict:
 
 
 def _pair_keys(pairs) -> set:
-    return {(p.entry_id, tuple(sorted(p.line_ids))) for p in pairs}
+    return {(tuple(sorted(p.entry_ids)), tuple(sorted(p.line_ids)))
+            for p in pairs}
 
 
 def pair_prf(pred: list[MatchPair], truth: Truth) -> dict:
-    """Precision/recall/F1 on (entry_id, sorted line_ids) match pairs."""
+    """Precision/recall/F1 on (sorted entry_ids, sorted line_ids) match pairs."""
     return _prf(_pair_keys(pred), _pair_keys(truth.pairs))
 
 
@@ -48,7 +49,7 @@ def auto_match_rate(pred: list[MatchPair], truth: Truth,
 
     best = {"rate": 0.0, "threshold": 1.0, "precision_at": 1.0}
     for t in thresholds:
-        accepted = [(m.entry_id, tuple(sorted(m.line_ids)))
+        accepted = [(tuple(sorted(m.entry_ids)), tuple(sorted(m.line_ids)))
                     for m in pred if m.confidence >= t]
         correct = sum(k in gold for k in accepted)
         precision = correct / len(accepted) if accepted else 1.0

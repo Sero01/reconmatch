@@ -13,7 +13,7 @@ from reconmatch.schema import (ReconReport, RowError, load_ledger_csv,
 MAX_BYTES = 1024 * 1024  # 1 MB per CSV
 SAMPLE_DIR = Path("samples")
 
-MATCH_HEADERS = ["Ledger entry", "Statement line(s)", "Tier", "Confidence"]
+MATCH_HEADERS = ["Ledger entries", "Statement line(s)", "Tier", "Confidence"]
 BREAK_HEADERS = ["Side", "Record", "Category", "Related", "Suggestion"]
 
 
@@ -33,7 +33,8 @@ def _checked_load(path: Path, loader, kind: str):
 
 
 def _render(report: ReconReport):
-    matches = [[m.entry_id, ", ".join(m.line_ids), m.tier, round(m.confidence, 3)]
+    matches = [[", ".join(m.entry_ids), ", ".join(m.line_ids), m.tier,
+                round(m.confidence, 3)]
                for m in report.matches]
     breaks = [[b.side, b.record_id, b.category, b.related_id or "", b.suggestion]
               for b in report.breaks]
