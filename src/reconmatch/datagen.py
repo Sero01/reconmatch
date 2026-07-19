@@ -26,6 +26,8 @@ VENDORS = [
 
 _PREFIXES = ["POS ", "NEFT ", "IMPS ", "ACH ", ""]
 
+_BATCH_DESCS = ["BULK PAYMENT", "NEFT BATCH SETTLEMENT", "SALARY BATCH"]
+
 
 class TruthPair(BaseModel):
     entry_ids: list[str]
@@ -86,6 +88,7 @@ def generate_pair(rng: random.Random, n_entries: int = 40,
     pairs: list[TruthPair] = []
     breaks: list[Break] = []
     line_no = 0
+    entry_no = 0
 
     def new_line(d: date, desc: str, amount: Decimal) -> StatementLine:
         nonlocal line_no
@@ -95,20 +98,43 @@ def generate_pair(rng: random.Random, n_entries: int = 40,
         lines.append(line)
         return line
 
-    for i in range(1, n_entries + 1):
+    def new_entry(d: date, desc: str, amount: Decimal) -> LedgerEntry:
+        nonlocal entry_no
+        entry_no += 1
+        e = LedgerEntry(entry_id=f"E{entry_no:04d}", date=d,
+                        description=desc, amount=amount)
+        ledger.append(e)
+        return e
+
+    for _ in range(n_entries):
         vendor = VENDORS[rng.randrange(len(VENDORS))]
         d = base + timedelta(days=rng.randrange(28))
         amount = _amount(rng)
-        entry = LedgerEntry(entry_id=f"E{i:04d}", date=d,
-                            description=f"{vendor} invoice {rng.randint(100, 999)}",
-                            amount=amount)
-        ledger.append(entry)
+        entry = new_entry(d, f"{vendor} invoice {rng.randint(100, 999)}",
+                          amount)
         desc = _mangle(rng, vendor)
         roll = rng.random()
-        if roll < 0.70:  # clean same-day 1:1
+        if roll < 0.64:  # clean same-day 1:1
             line = new_line(d, desc, amount)
             pairs.append(TruthPair(entry_ids=[entry.entry_id],
                                    line_ids=[line.line_id]))
+        elif roll < 0.70:  # gross batch: this entry + 1-2 more -> one line
+            batch = [entry]
+            for _ in range(rng.randint(1, 2)):
+                v2 = VENDORS[rng.randrange(len(VENDORS))]
+                a2 = _amount(rng)
+                if (a2 < 0) != (amount < 0):
+                    a2 = -a2  # gross batches are same-sign by definition
+                batch.append(new_entry(
+                    d + timedelta(days=rng.randrange(2)),
+                    f"{v2} invoice {rng.randint(100, 999)}", a2))
+            total = sum(e.amount for e in batch)
+            bline = new_line(d + timedelta(days=rng.randrange(2)),
+                             _BATCH_DESCS[rng.randrange(len(_BATCH_DESCS))],
+                             total)
+            pairs.append(TruthPair(
+                entry_ids=[e.entry_id for e in batch],
+                line_ids=[bline.line_id]))
         elif roll < 0.80:  # settles 1-3 days later
             line = new_line(d + timedelta(days=rng.randint(1, 3)), desc, amount)
             pairs.append(TruthPair(entry_ids=[entry.entry_id],

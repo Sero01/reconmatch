@@ -37,6 +37,17 @@ def test_perturbations_all_present_at_scale():
     assert any(len(p.line_ids) > 1 for p in truth.pairs)  # splits exist
 
 
+def test_batch_settlements_present_at_scale():
+    ledger, lines, truth = generate_pair(random.Random(5), n_entries=200)
+    batches = [p for p in truth.pairs if len(p.entry_ids) > 1]
+    assert batches, "no batch scenarios generated"
+    assert all(len(p.line_ids) == 1 for p in batches)
+    entries = {e.entry_id: e for e in ledger}
+    for p in batches:
+        signs = {entries[i].amount < 0 for i in p.entry_ids}
+        assert len(signs) == 1, f"mixed-sign batch {p}"
+
+
 def test_deterministic_for_seed():
     assert generate_pair(random.Random(3)) == generate_pair(random.Random(3))
 
