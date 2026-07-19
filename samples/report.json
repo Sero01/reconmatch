@@ -62,47 +62,51 @@
     },
     {
       "entry_ids": [
-        "E0007"
+        "E0007",
+        "E0008",
+        "E0009"
       ],
       "line_ids": [
         "S0007"
       ],
-      "tier": 1,
-      "confidence": 0.95
-    },
-    {
-      "entry_ids": [
-        "E0008"
-      ],
-      "line_ids": [
-        "S0008"
-      ],
-      "tier": 2,
-      "confidence": 0.7557692307692307
-    },
-    {
-      "entry_ids": [
-        "E0010"
-      ],
-      "line_ids": [
-        "S0010"
-      ],
-      "tier": 2,
-      "confidence": 0.753
+      "tier": 4,
+      "confidence": 0.5295673718315228
     },
     {
       "entry_ids": [
         "E0011"
       ],
       "line_ids": [
-        "S0011"
+        "S0009"
       ],
-      "tier": 1,
-      "confidence": 0.95
+      "tier": 2,
+      "confidence": 0.753
     },
     {
       "entry_ids": [
-        "E0012"
+        "E0012",
+        "E0013",
+        "E0014"
+      ],
+      "line_ids": [
+        "S0010"
+      ],
+      "tier": 4,
+      "confidence": 0.5263815060908084
+    },
+    {
+      "entry_ids": [
+        "E0015"
+      ],
+      "line_ids": [
+        "S0011"
+      ],
+      "tier": 2,
+      "confidence": 0.7340425531914894
+    },
+    {
+      "entry_ids": [
+        "E0016"
       ],
       "line_ids": [
         "S0012"
@@ -112,7 +116,7 @@
     },
     {
       "entry_ids": [
-        "E0013"
+        "E0017"
       ],
       "line_ids": [
         "S0013"
@@ -122,7 +126,7 @@
     },
     {
       "entry_ids": [
-        "E0014"
+        "E0018"
       ],
       "line_ids": [
         "S0014"
@@ -132,27 +136,18 @@
     },
     {
       "entry_ids": [
-        "E0015"
+        "E0019"
       ],
       "line_ids": [
-        "S0015"
-      ],
-      "tier": 1,
-      "confidence": 0.95
-    },
-    {
-      "entry_ids": [
-        "E0016"
-      ],
-      "line_ids": [
+        "S0015",
         "S0016"
       ],
-      "tier": 1,
-      "confidence": 0.95
+      "tier": 3,
+      "confidence": 0.6536363636363637
     },
     {
       "entry_ids": [
-        "E0017"
+        "E0021"
       ],
       "line_ids": [
         "S0017"
@@ -162,28 +157,28 @@
     },
     {
       "entry_ids": [
-        "E0018"
+        "E0022"
       ],
       "line_ids": [
-        "S0018",
-        "S0019"
-      ],
-      "tier": 3,
-      "confidence": 0.6536363636363637
-    },
-    {
-      "entry_ids": [
-        "E0020"
-      ],
-      "line_ids": [
-        "S0020"
+        "S0018"
       ],
       "tier": 1,
       "confidence": 0.95
     },
     {
       "entry_ids": [
-        "E0021"
+        "E0023"
+      ],
+      "line_ids": [
+        "S0019",
+        "S0020"
+      ],
+      "tier": 3,
+      "confidence": 0.6625000000000001
+    },
+    {
+      "entry_ids": [
+        "E0024"
       ],
       "line_ids": [
         "S0021"
@@ -193,18 +188,28 @@
     },
     {
       "entry_ids": [
-        "E0022"
+        "E0025"
       ],
       "line_ids": [
-        "S0022",
-        "S0023"
+        "S0022"
       ],
-      "tier": 3,
-      "confidence": 0.6625000000000001
+      "tier": 1,
+      "confidence": 0.95
     },
     {
       "entry_ids": [
-        "E0023"
+        "E0026",
+        "E0027"
+      ],
+      "line_ids": [
+        "S0023"
+      ],
+      "tier": 4,
+      "confidence": 0.5749313186813187
+    },
+    {
+      "entry_ids": [
+        "E0028"
       ],
       "line_ids": [
         "S0024"
@@ -214,7 +219,7 @@
     },
     {
       "entry_ids": [
-        "E0024"
+        "E0029"
       ],
       "line_ids": [
         "S0025"
@@ -224,17 +229,17 @@
     },
     {
       "entry_ids": [
-        "E0025"
+        "E0030"
       ],
       "line_ids": [
         "S0026"
       ],
-      "tier": 1,
-      "confidence": 0.95
+      "tier": 2,
+      "confidence": 0.6749999999999999
     },
     {
       "entry_ids": [
-        "E0026"
+        "E0031"
       ],
       "line_ids": [
         "S0027"
@@ -244,7 +249,7 @@
     },
     {
       "entry_ids": [
-        "E0027"
+        "E0032"
       ],
       "line_ids": [
         "S0028"
@@ -254,7 +259,7 @@
     },
     {
       "entry_ids": [
-        "E0028"
+        "E0033"
       ],
       "line_ids": [
         "S0029"
@@ -264,17 +269,18 @@
     },
     {
       "entry_ids": [
-        "E0029"
+        "E0034",
+        "E0035"
       ],
       "line_ids": [
         "S0030"
       ],
-      "tier": 2,
-      "confidence": 0.6749999999999999
+      "tier": 4,
+      "confidence": 0.5897894736842105
     },
     {
       "entry_ids": [
-        "E0030"
+        "E0038"
       ],
       "line_ids": [
         "S0031"
@@ -284,7 +290,7 @@
     },
     {
       "entry_ids": [
-        "E0031"
+        "E0039"
       ],
       "line_ids": [
         "S0032"
@@ -294,7 +300,7 @@
     },
     {
       "entry_ids": [
-        "E0032"
+        "E0040"
       ],
       "line_ids": [
         "S0033"
@@ -304,7 +310,7 @@
     },
     {
       "entry_ids": [
-        "E0033"
+        "E0041"
       ],
       "line_ids": [
         "S0034"
@@ -314,27 +320,18 @@
     },
     {
       "entry_ids": [
-        "E0034"
+        "E0042"
       ],
       "line_ids": [
-        "S0035"
-      ],
-      "tier": 1,
-      "confidence": 0.95
-    },
-    {
-      "entry_ids": [
-        "E0037"
-      ],
-      "line_ids": [
+        "S0035",
         "S0036"
       ],
-      "tier": 1,
-      "confidence": 0.95
+      "tier": 3,
+      "confidence": 0.65
     },
     {
       "entry_ids": [
-        "E0038"
+        "E0043"
       ],
       "line_ids": [
         "S0037"
@@ -344,7 +341,7 @@
     },
     {
       "entry_ids": [
-        "E0039"
+        "E0044"
       ],
       "line_ids": [
         "S0038"
@@ -354,78 +351,88 @@
     },
     {
       "entry_ids": [
-        "E0040"
+        "E0045"
       ],
       "line_ids": [
         "S0039"
       ],
       "tier": 1,
       "confidence": 0.95
+    },
+    {
+      "entry_ids": [
+        "E0046"
+      ],
+      "line_ids": [
+        "S0040"
+      ],
+      "tier": 2,
+      "confidence": 0.69375
     }
   ],
   "breaks": [
     {
       "side": "ledger",
-      "record_id": "E0009",
+      "record_id": "E0010",
       "category": "amount_mismatch_suspect",
-      "suggestion": "amounts disagree: ledger -683254.55 vs statement -682354.55 — check for a keying error or an absorbed fee",
-      "related_id": "S0009"
+      "suggestion": "amounts disagree: ledger -864119.9 vs statement -861419.90 — check for a keying error or an absorbed fee",
+      "related_id": "S0008"
     },
     {
       "side": "statement",
-      "record_id": "S0009",
+      "record_id": "S0008",
       "category": "amount_mismatch_suspect",
-      "suggestion": "amounts disagree: ledger -683254.55 vs statement -682354.55 — check for a keying error or an absorbed fee",
-      "related_id": "E0009"
+      "suggestion": "amounts disagree: ledger -864119.9 vs statement -861419.90 — check for a keying error or an absorbed fee",
+      "related_id": "E0010"
     },
     {
       "side": "statement",
-      "record_id": "S0042",
+      "record_id": "S0043",
       "category": "duplicate_suspect",
-      "suggestion": "identical to matched line S0020 — possible double presentation",
-      "related_id": "S0020"
-    },
-    {
-      "side": "statement",
-      "record_id": "S0040",
-      "category": "missing_in_ledger",
-      "suggestion": "no ledger entry for -200.51 on 2026-03-14 — record it (bank fees and interest are the usual culprits)",
-      "related_id": null
+      "suggestion": "identical to matched line S0035 — possible double presentation",
+      "related_id": "S0035"
     },
     {
       "side": "statement",
       "record_id": "S0041",
       "category": "missing_in_ledger",
-      "suggestion": "no ledger entry for -183.42 on 2026-03-02 — record it (bank fees and interest are the usual culprits)",
+      "suggestion": "no ledger entry for -302.99 on 2026-03-14 — record it (bank fees and interest are the usual culprits)",
+      "related_id": null
+    },
+    {
+      "side": "statement",
+      "record_id": "S0042",
+      "category": "missing_in_ledger",
+      "suggestion": "no ledger entry for -366.52 on 2026-03-09 — record it (bank fees and interest are the usual culprits)",
       "related_id": null
     },
     {
       "side": "ledger",
-      "record_id": "E0019",
+      "record_id": "E0020",
       "category": "missing_in_statement",
       "suggestion": "ledger expects -409613.34 around 2026-03-03 but the bank never saw it — payment may have failed or is still in transit",
       "related_id": null
     },
     {
       "side": "ledger",
-      "record_id": "E0035",
+      "record_id": "E0036",
       "category": "missing_in_statement",
       "suggestion": "ledger expects -126036.8 around 2026-03-12 but the bank never saw it — payment may have failed or is still in transit",
       "related_id": null
     },
     {
       "side": "ledger",
-      "record_id": "E0036",
+      "record_id": "E0037",
       "category": "missing_in_statement",
       "suggestion": "ledger expects -92655.2 around 2026-03-12 but the bank never saw it — payment may have failed or is still in transit",
       "related_id": null
     }
   ],
   "summary": {
-    "n_entries": 40,
-    "n_lines": 42,
-    "n_matched_entries": 36,
-    "match_rate": 0.9,
+    "n_entries": 46,
+    "n_lines": 43,
+    "n_matched_entries": 42,
+    "match_rate": 0.9130434782608695,
     "n_breaks": 8
   }
 }

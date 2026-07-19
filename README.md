@@ -13,15 +13,17 @@ Live demo: **[reconmatch-aa9c.onrender.com](https://reconmatch-aa9c.onrender.com
 
 | Metric | Value |
 |---|---|
-| **Auto-match rate @ ≥0.99 precision** | **95.4%** (observed precision 1.00) |
-| Pair precision / recall / F1 | 1.00 / 0.95 / **0.98** |
-| Break-classification precision / recall / F1 | 0.73 / 0.98 / **0.83** |
+| **Auto-match rate @ ≥0.99 precision** | **95.9%** (observed precision 1.00) |
+| Pair precision / recall / F1 | 1.00 / 0.96 / **0.98** |
+| Break-classification precision / recall / F1 | 0.75 / 0.97 / **0.83** |
 
-The headline is the one a reconciliation team actually buys: **95% of true
+The headline is the one a reconciliation team actually buys: **96% of true
 matches clear automatically with zero false matches**, leaving only the genuine
-exceptions for a human. Break recall is high (0.98 — few real exceptions are
-missed); break precision is lower (0.73) because the engine deliberately
+exceptions for a human. Break recall is high (0.97 — few real exceptions are
+missed); break precision is lower (0.75) because the engine deliberately
 over-flags amount-mismatch *suspects* rather than hide a possible error.
+(Baseline reset 2026-07-19: the synthetic distribution now includes
+gross-batch settlements, so earlier numbers are not comparable.)
 
 Numbers regenerate deterministically:
 
@@ -33,13 +35,15 @@ uv run python -m eval.run_eval --seeds 100-149
 
 One deterministic pass. Every tier proposes candidates; they compete in a
 single greedy assignment ordered by confidence, so a strong exact match always
-beats a weaker split that wants to poach its lines. No line is ever used twice.
+beats a weaker split or batch that wants to poach its records. No entry or
+line is ever used twice.
 
 | Tier | Rule | Confidence |
 |---|---|---|
 | 1 — exact | same signed amount + same date + (reference match or description similarity ≥ 0.55) | 0.95–1.00 |
 | 2 — windowed | same amount, date within ±3 days, description similarity ≥ 0.55 | 0.6–0.95, decaying with the date gap |
 | 3 — split | 2–3 statement lines summing exactly to one ledger entry inside the window (partial/split payments) | ~0.55, decaying with split size |
+| 4 — batch | 2–3 ledger entries summing exactly to one statement line inside the window (gross batch settlements: payroll runs, bulk supplier payments) | ~0.55, decaying with batch size |
 
 Amounts are `Decimal` throughout (never float); positive = money into the
 account, negative = money out. Descriptions are compared with a
@@ -94,8 +98,10 @@ push and fails the build on any regression beyond a 0.01 tolerance against
   itself never touches a model.
 - Ground truth lives only in the generator and the eval; the engine never sees
   it.
-- Out of scope (v1): ML-learned scoring, multi-currency FX matching, persistent
-  state, auth, many-to-many matching beyond k ≤ 3 splits.
+- Out of scope for now: ML-learned scoring, multi-currency FX matching,
+  persistent state, auth, N:M matching, 1:1 tolerance matching (near-miss
+  amounts surface as breaks, not matches), net-of-fee batch settlements
+  (exact sums only), and user-defined match rules.
 
 ## Deploy
 

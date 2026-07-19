@@ -63,14 +63,14 @@ def show_sample():
 
 with gr.Blocks(title="ReconMatch — reconciliation matching") as demo:
     gr.Markdown("# ReconMatch\nMatches bank-statement lines to internal ledger "
-                "entries — exact, date-windowed, and split payments — then "
-                "classifies every unmatched item as a break with a resolution "
-                "hint. Deterministic: same inputs, same output, zero inference "
-                "cost.")
+                "entries — exact, date-windowed, split payments, and batch "
+                "settlements — then classifies every unmatched item as a "
+                "break with a resolution hint. Deterministic: same inputs, "
+                "same output, zero inference cost.")
     with gr.Tab("Sample (precomputed)"):
-        gr.Markdown("A synthetic 40-entry ledger against its bank statement "
-                    "(date lags, split payments, bank fees, a keying error, a "
-                    "duplicate).")
+        gr.Markdown("A synthetic ledger against its bank statement "
+                    "(date lags, split payments, batch settlements, bank "
+                    "fees, a keying error, a duplicate).")
         btn_s = gr.Button("Load sample reconciliation")
         summary_s = gr.Markdown()
         gr.Markdown("### Matches")

@@ -2,16 +2,16 @@
   "seeds": "100-149",
   "n_sets": 50,
   "n_entries": 40,
-  "note": "deterministic offline held-out run; CI regenerates and compares",
+  "note": "deterministic offline held-out run; CI regenerates and compares. Baseline reset 2026-07-19: datagen adds gross-batch scenario (spec 2026-07-19), so pre-batch numbers are not comparable.",
   "aggregates": {
     "pair_precision": 1.0,
-    "pair_recall": 0.9541071017603525,
-    "pair_f1": 0.9762336616835532,
-    "auto_match_rate": 0.9541071017603525,
+    "pair_recall": 0.9587347717686403,
+    "pair_f1": 0.9786352615402579,
+    "auto_match_rate": 0.9587347717686403,
     "auto_match_precision": 1.0,
-    "break_precision": 0.7313150966680378,
-    "break_recall": 0.9771926961926962,
-    "break_f1": 0.8271159673659674,
-    "engine_match_rate": 0.8415
+    "break_precision": 0.7472364075552931,
+    "break_recall": 0.9727376512376513,
+    "break_f1": 0.8336776914857676,
+    "engine_match_rate": 0.849003285334796
   }
 }
