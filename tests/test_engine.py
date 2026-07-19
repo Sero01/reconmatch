@@ -107,6 +107,58 @@ def test_tier1_wins_lines_from_split_candidates():
     assert [m for m in ms if m.tier == 1]
 
 
+# --- tier 4 ---
+
+def test_batch_settlement_matches_tier4():
+    entries = [
+        entry("E1", desc="Global Talent Payroll invoice 101", amount="-40000.00"),
+        entry("E2", desc="Kavya Consulting invoice 102", amount="-15500.25"),
+        entry("E3", desc="Omega IT Services invoice 103", amount="-8200.75"),
+    ]
+    batch = line("S1", desc="NEFT BATCH SETTLEMENT", amount="-63701.00")
+    [m] = match(entries, [batch])
+    assert m.tier == 4
+    assert m.entry_ids == ["E1", "E2", "E3"]
+    assert m.line_ids == ["S1"]
+    assert m.confidence < 0.95
+
+
+def test_exact_match_beats_batch_poaching():
+    # E1 has an exact tier-1 partner; a batch wanting E1 must not steal it.
+    e1 = entry("E1", amount="-100.00")
+    e2 = entry("E2", desc="Kavya Consulting invoice 9", amount="-50.00")
+    s1 = line("S1", amount="-100.00")
+    s2 = line("S2", desc="BULK PAYMENT", amount="-150.00")
+    ms = match([e1, e2], [s1, s2])
+    assert len(ms) == 1
+    [m] = ms
+    assert m.entry_ids == ["E1"] and m.line_ids == ["S1"] and m.tier == 1
+
+
+def test_entry_used_once_across_tiers():
+    e1 = entry("E1", amount="-100.00")
+    e2 = entry("E2", desc="Kavya Consulting invoice 9", amount="-60.00")
+    s_batch = line("S1", desc="BULK PAYMENT", amount="-160.00")
+    s_exact = line("S2", amount="-100.00")
+    ms = match([e1, e2], [s_batch, s_exact])
+    used = [eid for m in ms for eid in m.entry_ids]
+    assert len(used) == len(set(used))
+
+
+def test_mixed_sign_never_batches():
+    e1 = entry("E1", amount="-100.00")
+    e2 = entry("E2", desc="Customer refund 7", amount="50.00")
+    s = line("S1", desc="BULK PAYMENT", amount="-50.00")
+    assert match([e1, e2], [s]) == []
+
+
+def test_batch_beyond_max_k_no_match():
+    entries = [entry(f"E{i}", desc=f"Vendor {i} invoice {i}", amount="-25.00")
+               for i in range(1, 5)]
+    s = line("S1", desc="BULK PAYMENT", amount="-100.00")
+    assert match(entries, [s], MatchConfig(max_split=3)) == []
+
+
 # --- end to end on generated data ---
 
 def test_engine_precision_floor_on_generated_data():

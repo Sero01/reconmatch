@@ -2,10 +2,12 @@
 
 Tier 1: same signed amount, same date, reference equality or description
         similarity. Tier 2: same amount inside a date window. Tier 3:
-        2..max_split statement lines summing exactly to one entry.
+        2..max_split statement lines summing exactly to one entry. Tier 4:
+        2..max_split ledger entries summing exactly to one statement line
+        (gross batch settlements).
 Candidates from every tier compete in one deterministic greedy pass
 ordered by confidence, so a strong exact match always beats a split
-that wants to poach its lines.
+or batch that wants to poach its records.
 """
 from __future__ import annotations
 
@@ -88,6 +90,30 @@ def _tier3(entry: LedgerEntry, lines: list[StatementLine],
     return out
 
 
+def _tier4(line: StatementLine, ledger: list[LedgerEntry],
+           config: MatchConfig) -> list[MatchPair]:
+    """One statement line settling 2..max_split ledger entries (gross batch)."""
+    window = [
+        e for e in ledger
+        if abs((e.date - line.date).days) <= config.date_window_days
+        and (e.amount < 0) == (line.amount < 0)
+    ][:12]  # bound the combination search
+    out = []
+    for k in range(2, config.max_split + 1):
+        for combo in combinations(window, k):
+            if sum(e.amount for e in combo) != line.amount:
+                continue
+            # batch lines ("SALARY BATCH") rarely echo entry descriptions,
+            # so similarity shapes confidence but is never a gate here
+            sims = [desc_sim(e.description, line.description) for e in combo]
+            confidence = 0.55 + 0.15 * (sum(sims) / len(sims)) - 0.05 * (k - 2)
+            out.append(MatchPair(
+                entry_ids=sorted(e.entry_id for e in combo),
+                line_ids=[line.line_id],
+                tier=4, confidence=confidence))
+    return out
+
+
 def match(ledger: list[LedgerEntry], lines: list[StatementLine],
           config: MatchConfig = MatchConfig()) -> list[MatchPair]:
     ledger = sorted(ledger, key=lambda e: e.entry_id)
@@ -100,6 +126,8 @@ def match(ledger: list[LedgerEntry], lines: list[StatementLine],
                 if pair:
                     candidates.append(pair)
         candidates.extend(_tier3(entry, lines, config))
+    for line in lines:
+        candidates.extend(_tier4(line, ledger, config))
 
     candidates.sort(key=lambda m: (-m.confidence, m.tier, tuple(m.entry_ids),
                                    tuple(m.line_ids)))
