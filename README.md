@@ -25,11 +25,49 @@ over-flags amount-mismatch *suspects* rather than hide a possible error.
 (Baseline reset 2026-07-19: the synthetic distribution now includes
 gross-batch settlements, so earlier numbers are not comparable.)
 
+**These are numbers on my own generator.** For what happens on somebody else's
+data, see the BenchRec section below — the auto-match claim does not survive
+there, and that result is the more honest one.
+
 Numbers regenerate deterministically:
 
 ```bash
 uv run python -m eval.run_eval --seeds 100-149
 ```
+
+## Third-party held-out: BenchRec cash v1.0
+
+A single reserved held-out scoring run against a licensed third-party dataset
+(CC BY 4.0; raw data is not redistributed here). Every method decision was
+fixed on `train` dev/val before this run executed.
+
+**Scoring: strict exact-set.** A B record counts as correct only if its
+complete predicted allocation set equals the target set. Both-empty counts as
+correct. Scoring was validated by reproducing the published reference's own
+figures under the same rule, so this is like-for-like.
+
+| Stratum | B records | ReconMatch | MatcherByChatGPT (published reference) |
+|---|--:|--:|--:|
+| ALL | 32,048 | **88.65%** | 62.45% |
+| single-A | 30,057 | **89.70%** | 65.88% |
+| multi-A | 1,779 | **70.43%** | 0.00% |
+
+Precision on emitted predictions: 93.33% overall (Wilson 95% LB 93.09%). The
+reference emits far less and is more precise where it does (95.20%); it scores
+zero on every multi-A record, which is the split ReconMatch was built for.
+
+**Disposition: `SUGGESTED_FOR_REVIEW`, not auto-match.** An auto-match bar was
+fixed *before* the run — Wilson 95% lower bound ≥ 99.8% precision at ≥ 50%
+coverage — and it was **not met**. The best held-out coverage clearing 99.8% is
+**6.80%**, against 89.78% in-sample; that gap is the overfitting, measured. No
+observable abstention predicate generalized (16/16 decision-tree configurations
+passed on dev and failed on val). **No auto-match is claimed on this data.**
+
+Caveat carried from the ladder: `train` is 27% N:M while `eval` multi-A is only
+~5.6%, so the eval mix leans toward the 1:1 backbone relative to train.
+
+Full run provenance, input hashes, and the experiment ladder are in
+`data/benchrec/artifacts/`.
 
 ## How matching works
 
