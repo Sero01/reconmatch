@@ -14,3 +14,10 @@ data/benchrec/*.log
 # Aggregate *.md artifacts are safe to track.
 data/benchrec/artifacts/*.csv
 data/benchrec/artifacts/*.parquet
+
+# Hyperframes render caches (regenerable)
+brag-output/composition/.thumbnails/
+brag-output/composition/.waveform-cache/
+brag-output/composition/.hyperframes/
+brag-output/composition/renders/
+brag-output/composition/snapshots/

@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, height=1080">
+    <title>ReconMatch brag</title>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <script src="assets/data/audio-bass.js"></script>
+    <style>
+      @font-face { font-family: "Newsreader"; src: url("assets/fonts/newsreader-latin-400-normal.woff2") format("woff2"); font-weight: 400; font-style: normal; }
+      @font-face { font-family: "Newsreader"; src: url("assets/fonts/newsreader-latin-500-normal.woff2") format("woff2"); font-weight: 500; font-style: normal; }
+      @font-face { font-family: "Newsreader"; src: url("assets/fonts/newsreader-latin-600-normal.woff2") format("woff2"); font-weight: 600; font-style: normal; }
+      @font-face { font-family: "Newsreader"; src: url("assets/fonts/newsreader-latin-400-italic.woff2") format("woff2"); font-weight: 400; font-style: italic; }
+      @font-face { font-family: "IBM Plex Mono"; src: url("assets/fonts/ibm-plex-mono-latin-400-normal.woff2") format("woff2"); font-weight: 400; font-style: normal; }
+      @font-face { font-family: "IBM Plex Mono"; src: url("assets/fonts/ibm-plex-mono-latin-500-normal.woff2") format("woff2"); font-weight: 500; font-style: normal; }
+      @font-face { font-family: "IBM Plex Mono"; src: url("assets/fonts/ibm-plex-mono-latin-600-normal.woff2") format("woff2"); font-weight: 600; font-style: normal; }
+      @font-face { font-family: "Source Sans 3"; src: url("assets/fonts/source-sans-3-latin-400-normal.woff2") format("woff2"); font-weight: 400; font-style: normal; }
+      @font-face { font-family: "Source Sans 3"; src: url("assets/fonts/source-sans-3-latin-600-normal.woff2") format("woff2"); font-weight: 600; font-style: normal; }
+      @font-face { font-family: "Source Sans 3"; src: url("assets/fonts/source-sans-3-latin-700-normal.woff2") format("woff2"); font-weight: 700; font-style: normal; }
+
+      :root {
+        --bg: #0f0d0b;
+        --panel: #1a1714;
+        --panel-2: #141210;
+        --line: #2f2a25;
+        --line-soft: #26211d;
+        --text: #f4efe9;
+        --muted: #a8a097;
+        --accent: #f97316;
+        --accent-soft: #fdba74;
+        --btn: #ea580c;
+        --red: #f87171;
+        --green: #1cbc58;
+        --serif: "Newsreader", serif;
+        --mono: "IBM Plex Mono", monospace;
+        --ui: "Source Sans 3", sans-serif;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: var(--bg);
+        color: var(--text);
+        font-family: var(--serif);
+      }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; }
+      .clip { position: absolute; inset: 0; }
+      .inner { position: absolute; inset: 0; }
+      .abs { position: absolute; }
+      .mono { font-family: var(--mono); }
+      .num { font-variant-numeric: tabular-nums; }
+
+      /* ---------- persistent background ---------- */
+      #rules {
+        position: absolute; left: 0; top: 0; width: 1920px; height: 1400px;
+        background-image: repeating-linear-gradient(to bottom, transparent 0 62px, #1f1a17 62px 64px);
+      }
+      .margin-rule { position: absolute; top: 0; width: 2px; height: 1080px; background: rgba(249, 115, 22, 0.3); }
+      #glow-drift { position: absolute; left: 820px; top: -420px; width: 1500px; height: 1500px; }
+      #glow {
+        width: 100%; height: 100%; border-radius: 50%; opacity: 0.2;
+        background: radial-gradient(circle at center, rgba(249, 115, 22, 0.55) 0%, rgba(249, 115, 22, 0.16) 38%, rgba(249, 115, 22, 0) 66%);
+      }
+      #topbar {
+        position: absolute; left: 120px; top: 40px; width: 1680px; height: 44px;
+        display: flex; align-items: center;
+        font-family: var(--mono); font-size: 20px; letter-spacing: 0.22em; color: var(--muted);
+      }
+      .scene-tag {
+        position: absolute; right: 120px; top: 40px; height: 44px; display: flex; align-items: center;
+        font-family: var(--mono); font-size: 20px; letter-spacing: 0.22em; color: var(--accent-soft);
+      }
+      .label { font-family: var(--mono); font-size: 20px; letter-spacing: 0.2em; color: var(--muted); }
+
+      /* ---------- scene 1 ---------- */
+      .s1-head { position: absolute; left: 120px; top: 128px; width: 1560px; }
+      .h-line { font-size: 88px; font-weight: 500; line-height: 1.12; letter-spacing: -0.02em; }
+      .h-line.em { font-style: italic; font-weight: 400; color: var(--accent-soft); }
+      .lrow {
+        position: absolute; left: 120px; width: 780px; height: 96px;
+        display: flex; align-items: center; gap: 28px; padding: 0 32px;
+        background: var(--panel); border: 2px solid var(--line); border-radius: 14px;
+        font-family: var(--mono);
+      }
+      .lrow .id { font-size: 22px; color: var(--accent-soft); letter-spacing: 0.04em; }
+      .lrow .name { flex: 1; font-size: 26px; white-space: nowrap; }
+      .lrow .amt { font-size: 30px; font-weight: 500; font-variant-numeric: tabular-nums; }
+      #s1-sum { position: absolute; left: 120px; top: 852px; width: 780px; height: 70px; }
+      #s1-sum-rule { position: absolute; left: 0; top: 0; width: 780px; height: 3px; background: var(--accent); transform-origin: left center; }
+      .sum-row {
+        position: absolute; left: 0; top: 16px; width: 780px; padding: 0 32px;
+        display: flex; align-items: baseline; justify-content: space-between; font-family: var(--mono);
+      }
+      .sum-row .label { font-size: 20px; }
+      #s1-sum-val { font-size: 36px; font-weight: 600; font-variant-numeric: tabular-nums; }
+      #s1-links { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: visible; }
+      #s1-card {
+        position: absolute; left: 1160px; top: 474px; width: 640px; height: 380px; padding: 36px 40px;
+        background: var(--panel); border: 2px solid var(--line); border-radius: 18px;
+        font-family: var(--mono); display: flex; flex-direction: column;
+      }
+      .card-top { display: flex; justify-content: space-between; }
+      .card-date { margin-top: 18px; font-size: 24px; color: var(--muted); }
+      .card-desc { margin-top: 56px; font-size: 34px; font-weight: 500; letter-spacing: 0.02em; }
+      #s1-card-amt { margin-top: 14px; font-size: 64px; font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+      #s1-badge {
+        position: absolute; left: 1160px; top: 884px; padding: 12px 22px; border-radius: 10px;
+        background: var(--accent); color: var(--bg);
+        font-family: var(--mono); font-size: 24px; font-weight: 600; letter-spacing: 0.1em;
+      }
+
+      /* ---------- scene 2 (Gradio app, dark theme) ---------- */
+      #s2-win {
+        position: absolute; left: 160px; top: 104px; width: 1600px; height: 944px; overflow: hidden;
+        background: var(--panel-2); border: 2px solid var(--line); border-radius: 18px;
+        box-shadow: 0 40px 120px rgba(0, 0, 0, 0.55);
+      }
+      .chrome {
+        height: 56px; display: flex; align-items: center; gap: 10px; padding: 0 22px;
+        background: var(--panel); border-bottom: 2px solid var(--line);
+      }
+      .chrome i { display: block; width: 14px; height: 14px; border-radius: 50%; background: #3d3530; }
+      .url {
+        margin-left: 24px; padding: 6px 18px; border-radius: 8px; background: var(--bg);
+        font-family: var(--mono); font-size: 20px; color: var(--muted);
+      }
+      .url:empty { display: none; }
+      .gr-body { padding: 32px 48px; font-family: var(--ui); }
+      .gr-h1 { font-size: 52px; font-weight: 700; line-height: 1.1; letter-spacing: -0.01em; }
+      .gr-desc { margin-top: 6px; font-size: 24px; color: var(--muted); }
+      .gr-tabs { margin-top: 22px; display: flex; gap: 8px; border-bottom: 2px solid var(--line); }
+      .tab { padding: 10px 18px; font-size: 24px; color: var(--muted); }
+      .tab.on { color: var(--text); box-shadow: inset 0 -3px 0 var(--accent); }
+      #s2-btn {
+        margin-top: 22px; height: 64px; border-radius: 10px; background: var(--btn); color: #fff7ed;
+        display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 600;
+      }
+      #s2-summary { margin-top: 22px; height: 40px; font-size: 30px; line-height: 40px; }
+      #s2-summary b { font-weight: 700; color: var(--accent-soft); }
+      .gr-h3 { margin-top: 18px; font-size: 30px; font-weight: 600; }
+      .gr-table { margin-top: 12px; border: 2px solid var(--line); border-radius: 10px; overflow: hidden; }
+      .tr {
+        position: relative; height: 46px; padding: 0 24px;
+        display: grid; grid-template-columns: 480px 380px 180px 1fr; align-items: center;
+        font-size: 24px; border-top: 2px solid var(--line-soft);
+      }
+      .tr.th { border-top: 0; background: var(--panel); color: var(--muted); font-weight: 600; }
+      .tr .tier4 { color: var(--accent-soft); font-weight: 700; }
+      #s2-hl {
+        position: absolute; left: 0; top: 0; width: 100%; height: 100%;
+        background: rgba(249, 115, 22, 0.14); box-shadow: inset 0 0 0 2px var(--accent); opacity: 0;
+      }
+      #s2-cursor { position: absolute; left: 0; top: 0; width: 34px; height: 48px; }
+      #s2-ripple {
+        position: absolute; left: 1140px; top: 380px; width: 80px; height: 80px; border-radius: 50%;
+        border: 3px solid var(--accent-soft); opacity: 0;
+      }
+
+      /* ---------- scene 3 ---------- */
+      #s3-head { position: absolute; left: 120px; top: 196px; width: 660px; font-size: 104px; font-weight: 500; line-height: 1.04; letter-spacing: -0.025em; }
+      #s3-panel { position: absolute; left: 880px; top: 176px; width: 920px; }
+      .cmp { margin-bottom: 22px; }
+      .cmp .label { display: block; margin-bottom: 16px; }
+      .cmp .big { font-family: var(--mono); font-size: 110px; font-weight: 500; line-height: 1.3; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+      .swap { position: relative; display: inline-block; isolation: isolate; }
+      .swap .hl {
+        position: absolute; left: -6px; top: 14px; width: calc(100% + 12px); height: calc(100% - 22px); z-index: -1;
+        background: rgba(248, 113, 113, 0.2); border-bottom: 5px solid var(--red); transform-origin: left center;
+      }
+      #s3-chip {
+        display: inline-block; margin-top: 10px; padding: 10px 20px; border-radius: 10px;
+        border: 2px solid var(--red); background: rgba(248, 113, 113, 0.1); color: var(--red);
+        font-family: var(--mono); font-size: 28px; font-weight: 500;
+      }
+      #s3-hint { margin-top: 34px; font-family: var(--mono); }
+      #s3-hint .label { display: block; margin-bottom: 10px; }
+      #s3-hint-text { display: block; font-size: 32px; }
+      #s3-strip {
+        position: absolute; left: 120px; top: 916px; width: 1680px; padding-top: 22px;
+        display: flex; align-items: baseline; gap: 36px; border-top: 2px solid var(--line); white-space: nowrap;
+        font-family: var(--mono); font-size: 24px; color: var(--muted);
+      }
+      #s3-strip b { color: var(--text); font-weight: 600; margin-right: 10px; }
+
+      /* ---------- scene 4 ---------- */
+      #s4-eyebrow { position: absolute; left: 120px; top: 150px; width: 1680px; font-family: var(--mono); font-size: 24px; letter-spacing: 0.12em; color: var(--accent-soft); white-space: nowrap; }
+      #s4-head { position: absolute; left: 120px; top: 222px; width: 1680px; font-size: 120px; font-weight: 500; line-height: 1.05; letter-spacing: -0.03em; }
+      #s4-bars { position: absolute; left: 120px; top: 430px; width: 1680px; }
+      .bar-row { margin-bottom: 40px; }
+      .bar-meta { display: flex; align-items: baseline; justify-content: space-between; font-family: var(--mono); }
+      .bar-name { font-size: 30px; }
+      .bar-name.muted { color: var(--muted); }
+      .bar-val { font-size: 72px; font-weight: 600; font-variant-numeric: tabular-nums; line-height: 1.05; }
+      .bar-val.acc { color: var(--accent-soft); }
+      .track { position: relative; margin-top: 8px; width: 100%; height: 30px; border-radius: 6px; background: #2a2521; overflow: hidden; }
+      .track.sm { height: 18px; }
+      .fill { position: absolute; left: 0; top: 0; width: 100%; height: 100%; transform-origin: left center; }
+      .fill.acc { background: var(--accent); }
+      .fill.ref { background: #7a7168; }
+      #s4-split {
+        position: absolute; left: 120px; top: 800px; width: 1680px;
+        display: grid; grid-template-columns: 520px 1fr 1fr; gap: 48px; align-items: end;
+        padding-top: 28px; border-top: 2px solid var(--line); font-family: var(--mono);
+      }
+      .split-label { font-family: var(--serif); font-size: 48px; font-weight: 500; line-height: 1.1; }
+      .split-label span { display: block; margin-top: 6px; font-family: var(--mono); font-size: 22px; color: var(--muted); letter-spacing: 0.06em; }
+      .mini-meta { display: flex; align-items: baseline; justify-content: space-between; }
+      .mini-meta span { font-size: 24px; color: var(--muted); }
+      .mini-meta b { font-size: 48px; font-weight: 600; font-variant-numeric: tabular-nums; }
+      .mini-meta b.acc { color: var(--accent-soft); }
+
+      /* ---------- scene 5 ---------- */
+      #s5-line { position: absolute; left: 120px; top: 236px; width: 1400px; font-size: 92px; font-weight: 500; line-height: 1.1; letter-spacing: -0.02em; }
+      #s5-line em { font-style: normal; color: var(--accent-soft); }
+      #s5-stamp {
+        position: absolute; left: 120px; top: 560px; padding: 6px 36px;
+        border: 8px solid var(--green); border-radius: 14px; color: var(--green);
+        font-family: var(--mono); font-size: 116px; font-weight: 600; letter-spacing: 0.06em; line-height: 1.15;
+      }
+      #s5-retired { position: absolute; left: 1130px; top: 650px; font-size: 88px; font-style: italic; line-height: 1.1; }
+      #s5-foot { position: absolute; left: 120px; top: 900px; font-family: var(--mono); font-size: 24px; color: var(--muted); letter-spacing: 0.04em; }
+
+      /* ---------- scene 6 ---------- */
+      #s6-mark { position: absolute; left: 110px; top: 318px; font-size: 220px; font-weight: 500; line-height: 1.05; letter-spacing: -0.035em; }
+      #s6-mark span { display: inline-block; transform-origin: left center; }
+      #s6-rule { position: absolute; left: 124px; top: 596px; width: 1120px; height: 4px; background: var(--accent); transform-origin: left center; }
+      #s6-tag { position: absolute; left: 120px; top: 628px; font-size: 64px; font-style: italic; line-height: 1.15; }
+      #s6-url { position: absolute; left: 120px; top: 752px; font-family: var(--mono); font-size: 34px; color: var(--accent-soft); letter-spacing: 0.02em; }
+      #s6-tiers { position: absolute; left: 1400px; top: 356px; width: 400px; font-family: var(--mono); }
+      #s6-tiers .label { margin-bottom: 14px; }
+      .tier { display: flex; align-items: baseline; gap: 22px; padding: 14px 0; border-top: 2px solid var(--line); font-size: 30px; }
+      .tier b { width: 34px; color: var(--accent-soft); font-weight: 600; }
+    </style>
+  </head>
+  <body>
+    <div data-hf-id="hf-2ps0" id="root" data-composition-id="main" data-start="0" data-duration="22.8" data-width="1920" data-height="1080">
+      <!-- Persistent background: ledger rules, margin line, audio-reactive glow, top bar -->
+      <div data-hf-id="hf-h61b" id="bg" class="clip" data-start="0" data-duration="22.8" data-track-index="0">
+        <div data-hf-id="hf-bg51" id="rules" data-layout-ignore=""></div>
+        <div data-hf-id="hf-a9o0" class="margin-rule" style="left: 70px" data-layout-ignore=""></div>
+        <div data-hf-id="hf-j0ct" class="margin-rule" style="left: 80px" data-layout-ignore=""></div>
+        <div data-hf-id="hf-ryal" id="glow-drift" data-layout-ignore=""><div data-hf-id="hf-27c6" id="glow"></div></div>
+        <div data-hf-id="hf-fmbx" id="topbar"></div>
+      </div>
+
+      <!-- Scene 1: one payment, three entries -->
+      <section style="opacity: 1" data-hf-id="hf-2vbl" id="s1" class="clip" data-start="0" data-duration="4.95" data-track-index="1">
+        <div data-hf-id="hf-efo9" class="inner" id="s1-inner">
+          <div data-hf-id="hf-jx18" class="scene-tag"></div>
+          <div data-hf-id="hf-sg2v" class="s1-head">
+            <div data-hf-id="hf-4mbn" class="h-line" id="s1-l1">The bank saw one payment.</div>
+            <div data-hf-id="hf-pj16" class="h-line em" id="s1-l2">Your ledger booked three.</div>
+          </div>
+          <div data-hf-id="hf-3k6v" class="label abs" id="s1-ledger-label" style="left: 120px; top: 456px">LEDGER</div>
+          <div data-hf-id="hf-ssyw" class="lrow" id="s1-r1" style="top: 500px"><span data-hf-id="hf-deyc" class="id">E0007</span><span data-hf-id="hf-nf2p" class="name">Metro Property Rentals</span><span data-hf-id="hf-cqec" class="amt">−638,787.31</span></div>
+          <div data-hf-id="hf-2o37" class="lrow" id="s1-r2" style="top: 616px"><span data-hf-id="hf-gzpl" class="id">E0008</span><span data-hf-id="hf-mw1s" class="name">Iris Marketing Group</span><span data-hf-id="hf-d9so" class="amt">−715,032.43</span></div>
+          <div data-hf-id="hf-qfvv" class="lrow" id="s1-r3" style="top: 732px"><span data-hf-id="hf-he0m" class="id">E0009</span><span data-hf-id="hf-oeky" class="name">Global Talent Payroll</span><span data-hf-id="hf-df9y" class="amt">−798,592.07</span></div>
+          <div data-hf-id="hf-p297" id="s1-sum">
+            <div data-hf-id="hf-ma8u" id="s1-sum-rule"></div>
+            <div data-hf-id="hf-8rjl" class="sum-row" id="s1-sum-row"><span data-hf-id="hf-x2s0" class="label">SUM OF 3 ENTRIES</span><span data-hf-id="hf-pdz9" id="s1-sum-val">−2,152,411.81</span></div>
+          </div>
+          <svg data-hf-id="hf-lbx1" id="s1-links" viewBox="0 0 1920 1080" data-layout-ignore="">
+            <path data-hf-id="hf-cbqv" class="link" d="M900 548 C1030 548 1030 634 1160 634" fill="none" stroke="#f97316" stroke-width="3" />
+            <path data-hf-id="hf-ed15" class="link" d="M900 664 C1030 664 1030 664 1160 664" fill="none" stroke="#f97316" stroke-width="3" />
+            <path data-hf-id="hf-vl6j" class="link" d="M900 780 C1030 780 1030 694 1160 694" fill="none" stroke="#f97316" stroke-width="3" />
+            <circle data-hf-id="hf-sbkl" class="node" cx="900" cy="548" r="7" fill="#f97316" />
+            <circle data-hf-id="hf-fh3e" class="node" cx="900" cy="664" r="7" fill="#f97316" />
+            <circle data-hf-id="hf-b1jn" class="node" cx="900" cy="780" r="7" fill="#f97316" />
+          </svg>
+          <div data-hf-id="hf-kgys" id="s1-card">
+            <div data-hf-id="hf-ub2w" class="card-top"><span data-hf-id="hf-fioe" class="label">BANK STATEMENT</span><span data-hf-id="hf-904b" class="label">S0007</span></div>
+            <div data-hf-id="hf-w2ks" class="card-date">2026-03-04</div>
+            <div data-hf-id="hf-871m" class="card-desc">NEFT BATCH SETTLEMENT</div>
+            <div data-hf-id="hf-odz8" id="s1-card-amt">−2,152,411.81</div>
+          </div>
+          <div data-hf-id="hf-35q7" id="s1-badge">TIER 4 · BATCH · 0.53</div>
+        </div>
+      </section>
+
+      <!-- Scene 2: the Gradio app loads the sample -->
+      <section data-hf-id="hf-xv3w" id="s2" class="clip" data-start="4.4" data-duration="5.15" data-track-index="2">
+        <div data-hf-id="hf-0mm6" class="inner" id="s2-inner">
+          <div data-hf-id="hf-u6js" class="scene-tag"></div>
+          <div data-hf-id="hf-jbdf" id="s2-win">
+            <div data-hf-id="hf-6ex2" class="chrome"><i data-hf-id="hf-wt6k"></i><i data-hf-id="hf-zeb8"></i><i data-hf-id="hf-y7e5"></i><div data-hf-id="hf-u5xw" class="url"></div></div>
+            <div data-hf-id="hf-ot4c" class="gr-body">
+              <div data-hf-id="hf-n9dt" class="gr-h1">ReconMatch</div>
+              <div data-hf-id="hf-r6t7" class="gr-desc">Deterministic: same inputs, same output, zero inference cost.</div>
+              <div data-hf-id="hf-k364" class="gr-tabs"><span data-hf-id="hf-1r3y" class="tab on">Sample (precomputed)</span><span data-hf-id="hf-wxax" class="tab">Reconcile your own</span></div>
+              <div data-hf-id="hf-ymqy" id="s2-btn">Load sample reconciliation</div>
+              <div data-hf-id="hf-gyji" id="s2-summary"><b data-hf-id="hf-ft4i">42/46</b> ledger entries auto-matched (<b data-hf-id="hf-k01a">91%</b>) · <b data-hf-id="hf-pjvr">8</b> breaks flagged · 43 statement lines</div>
+              <div data-hf-id="hf-5i2o" class="gr-h3">Matches</div>
+              <div data-hf-id="hf-mt50" class="gr-table">
+                <div data-hf-id="hf-k0e6" class="tr th"><span data-hf-id="hf-m5fk">Ledger entries</span><span data-hf-id="hf-yggc">Statement line(s)</span><span data-hf-id="hf-8mf9">Tier</span><span data-hf-id="hf-c1v9">Confidence</span></div>
+                <div data-hf-id="hf-8ri6" class="tr row"><span data-hf-id="hf-o64f">E0001</span><span data-hf-id="hf-3xwp">S0001</span><span data-hf-id="hf-ikog">1</span><span data-hf-id="hf-a0lp">0.95</span></div>
+                <div data-hf-id="hf-p1k2" class="tr row"><span data-hf-id="hf-nrte">E0002</span><span data-hf-id="hf-54ts">S0002</span><span data-hf-id="hf-cy6g">1</span><span data-hf-id="hf-wzpd">0.95</span></div>
+                <div data-hf-id="hf-pfv3" class="tr row"><span data-hf-id="hf-ndid">E0003</span><span data-hf-id="hf-4qir">S0003</span><span data-hf-id="hf-br9d">1</span><span data-hf-id="hf-y6mg">0.95</span></div>
+                <div data-hf-id="hf-pu64" class="tr row"><span data-hf-id="hf-q5nk">E0004</span><span data-hf-id="hf-2qzm">S0004</span><span data-hf-id="hf-c5ke">1</span><span data-hf-id="hf-xsbf">0.95</span></div>
+                <div data-hf-id="hf-q8h5" class="tr row"><span data-hf-id="hf-prcj">E0005</span><span data-hf-id="hf-2col">S0005</span><span data-hf-id="hf-aynb">1</span><span data-hf-id="hf-vssa">0.95</span></div>
+                <div data-hf-id="hf-qms6" class="tr row"><span data-hf-id="hf-pd1i">E0006</span><span data-hf-id="hf-3jlo">S0006</span><span data-hf-id="hf-bcyc">1</span><span data-hf-id="hf-veh9">0.95</span></div>
+                <div data-hf-id="hf-qstc" class="tr row" id="s2-batch"><div data-hf-id="hf-25zf" id="s2-hl"></div><span data-hf-id="hf-pen4">E0007, E0008, E0009</span><span data-hf-id="hf-35an">S0007</span><span data-hf-id="hf-oobp" class="tier4">4</span><span data-hf-id="hf-ughb">0.53</span></div>
+                <div data-hf-id="hf-r137" class="tr row"><span data-hf-id="hf-lof6">E0011</span><span data-hf-id="hf-wphd">S0009</span><span data-hf-id="hf-hdrd">2</span><span data-hf-id="hf-qi7o">0.753</span></div>
+              </div>
+            </div>
+          </div>
+          <div data-hf-id="hf-yt9p" id="s2-ripple"></div>
+          <svg data-hf-id="hf-ac7l" id="s2-cursor" viewBox="0 0 24 34" data-layout-ignore="">
+            <path data-hf-id="hf-hjqk" d="M1 1 L1 27 L7.5 21 L12 32 L16.5 30 L12 19.5 L21 19.5 Z" fill="#f4efe9" stroke="#0f0d0b" stroke-width="1.6" stroke-linejoin="round" />
+          </svg>
+        </div>
+      </section>
+
+      <!-- Scene 3: a break, explained -->
+      <section data-hf-id="hf-2mxt" id="s3" class="clip" data-start="9.0" data-duration="4.3" data-track-index="3">
+        <div data-hf-id="hf-k7gj" class="inner" id="s3-inner">
+          <div data-hf-id="hf-8fax" class="scene-tag" data-layout-allow-overlap="">03 / BREAKS</div>
+          <div data-hf-id="hf-76rx" id="s3-head" data-layout-allow-overlap="">What doesn't match gets a reason.</div>
+          <div data-hf-id="hf-anwy" id="s3-panel">
+            <div data-hf-id="hf-i0z6" class="cmp" id="s3-a">
+              <div data-hf-id="hf-28u5" class="label">LEDGER · E0010 · 2026-03-29</div>
+              <div data-hf-id="hf-u56r" class="big">−86<span data-hf-id="hf-nu80" class="swap"><i data-hf-id="hf-18w0" class="hl"></i><span data-hf-id="hf-n0zq" class="swap-t">4,1</span></span>19.90</div>
+            </div>
+            <div data-hf-id="hf-e2v5" class="cmp" id="s3-b">
+              <div data-hf-id="hf-4t3w" class="label">STATEMENT · S0008 · 2026-03-29</div>
+              <div data-hf-id="hf-qlhf" class="big">−86<span data-hf-id="hf-aldk" class="swap"><i data-hf-id="hf-m9mg" class="hl"></i><span data-hf-id="hf-jwhi" class="swap-t">1,4</span></span>19.90</div>
+            </div>
+            <div data-hf-id="hf-ynst" id="s3-chip">amount_mismatch_suspect</div>
+            <div data-hf-id="hf-edi3" id="s3-hint">
+              <span data-hf-id="hf-jgww" class="label" id="s3-hint-label">SUGGESTION</span>
+              <span data-hf-id="hf-9osn" id="s3-hint-text">check for a keying error or an absorbed fee</span>
+            </div>
+          </div>
+          <div data-hf-id="hf-atl6" id="s3-strip">
+            <span data-hf-id="hf-hadl" class="label">8 SAMPLE BREAKS</span>
+            <span data-hf-id="hf-yk97" class="brk"><b data-hf-id="hf-rxpx">2</b>amount_mismatch_suspect</span>
+            <span data-hf-id="hf-mh5r" class="brk"><b data-hf-id="hf-t4n0">1</b>duplicate_suspect</span>
+            <span data-hf-id="hf-mb66" class="brk"><b data-hf-id="hf-mt2h">2</b>missing_in_ledger</span>
+            <span data-hf-id="hf-uj18" class="brk"><b data-hf-id="hf-sc0y">3</b>missing_in_statement</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Scene 4: someone else's data -->
+      <section data-hf-id="hf-5ndi" id="s4" class="clip" data-start="12.8" data-duration="4.4" data-track-index="4">
+        <div data-hf-id="hf-0u5s" class="inner" id="s4-inner">
+          <div data-hf-id="hf-hrdw" class="scene-tag">04 / HELD-OUT</div>
+          <div data-hf-id="hf-2pre" id="s4-eyebrow">BENCHREC CASH v1.0 · 32,048 HELD-OUT RECORDS</div>
+          <div data-hf-id="hf-hnd2" id="s4-head">Someone else's data.</div>
+          <div data-hf-id="hf-megj" id="s4-bars">
+            <div data-hf-id="hf-a0eb" class="bar-row" id="s4-r1">
+              <div data-hf-id="hf-72a7" class="bar-meta"><span data-hf-id="hf-xgks" class="bar-name">ReconMatch</span><span data-hf-id="hf-orhm" class="bar-val acc" id="s4-v1">88.65%</span></div>
+              <div data-hf-id="hf-64lp" class="track"><div data-hf-id="hf-pzxj" class="fill acc" id="s4-f1"></div></div>
+            </div>
+            <div data-hf-id="hf-z4wo" class="bar-row" id="s4-r2">
+              <div data-hf-id="hf-y167" class="bar-meta"><span data-hf-id="hf-cnd9" class="bar-name muted">MatcherByChatGPT (published reference)</span><span data-hf-id="hf-wyye" class="bar-val" id="s4-v2">62.45%</span></div>
+              <div data-hf-id="hf-gav5" class="track"><div data-hf-id="hf-6vx0" class="fill ref" id="s4-f2"></div></div>
+            </div>
+          </div>
+          <div data-hf-id="hf-6lyn" id="s4-split">
+            <div data-hf-id="hf-vkaq" class="split-label">Split payments<span data-hf-id="hf-g029">multi-A · 1,779 records</span></div>
+            <div data-hf-id="hf-x34l" class="mini">
+              <div data-hf-id="hf-lpvd" class="mini-meta"><span data-hf-id="hf-w2a9">ReconMatch</span><b data-hf-id="hf-vgz0" class="acc" id="s4-v3">70.43%</b></div>
+              <div data-hf-id="hf-h427" class="track sm"><div data-hf-id="hf-i3ph" class="fill acc" id="s4-f3"></div></div>
+            </div>
+            <div data-hf-id="hf-mudl" class="mini">
+              <div data-hf-id="hf-qyvh" class="mini-meta"><span data-hf-id="hf-o2pq">Reference</span><b data-hf-id="hf-y1cn" id="s4-v4">0.00%</b></div>
+              <div data-hf-id="hf-02r3" class="track sm"><div data-hf-id="hf-qfai" class="fill ref" id="s4-f4"></div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Scene 5: the retraction (hard cut in) -->
+      <section data-hf-id="hf-gjyo" id="s5" class="clip" data-start="17.2" data-duration="3.6" data-track-index="5">
+        <div data-hf-id="hf-qgd9" class="inner" id="s5-inner">
+          <div data-hf-id="hf-dliu" class="scene-tag">05 / DISPOSITION</div>
+          <div data-hf-id="hf-mown" id="s5-line">Auto-match bar, set before the run: <em data-hf-id="hf-qzyw">99.8% precision.</em></div>
+          <div data-hf-id="hf-ukxm" id="s5-stamp">Benchmarked</div>
+          <div data-hf-id="hf-5zao" id="s5-retired">tried and tested</div>
+          <div data-hf-id="hf-d8ap" id="s5-foot">best held-out coverage clearing 99.8%: 6.80%</div>
+        </div>
+      </section>
+
+      <!-- Scene 6: outro -->
+      <section data-hf-id="hf-4xct" id="s6" class="clip" data-start="20.2" data-duration="2.6" data-track-index="6">
+        <div data-hf-id="hf-0spe" class="inner" id="s6-inner">
+          <div data-hf-id="hf-nbwc" id="s6-mark"><span data-hf-id="hf-2eky" data-layout-allow-overlap="">ReconMatch</span></div>
+          <div data-hf-id="hf-foet" id="s6-rule"></div>
+          <div data-hf-id="hf-gpqn" id="s6-tag">Same inputs, same output.</div>
+          <div data-hf-id="hf-9i0l" id="s6-url">reconmatch-aa9c.onrender.com</div>
+          <div data-hf-id="hf-v58e" id="s6-tiers">
+            <div data-hf-id="hf-057u" class="label">MATCH TIERS</div>
+            <div data-hf-id="hf-c5dz" class="tier"><b data-hf-id="hf-dmic">1</b>exact</div>
+            <div data-hf-id="hf-00u1" class="tier"><b data-hf-id="hf-nzzk">2</b>windowed</div>
+            <div data-hf-id="hf-jpng" class="tier"><b data-hf-id="hf-nwee">3</b>split</div>
+            <div data-hf-id="hf-sswc" class="tier"><b data-hf-id="hf-ubk3">4</b>batch</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Audio: music bed + motion-matched SFX (own track each) -->
+      <audio data-hf-id="hf-znky" id="bgm" src="assets/music/happy-beats-business-moves-vol-12-by-ende-dot-app.mp3" data-start="0" data-duration="22.8" data-track-index="10" data-volume="1"></audio>
+      <audio data-hf-id="hf-z8wq" id="sfx-row1" src="assets/sfx/interface/drop_001.ogg" data-start="1.62" data-duration="0.11" data-track-index="11" data-volume="0.5"></audio>
+      <audio data-hf-id="hf-6ie8" id="sfx-row2" src="assets/sfx/interface/drop_002.ogg" data-start="2.17" data-duration="0.19" data-track-index="12" data-volume="0.5"></audio>
+      <audio data-hf-id="hf-4v5p" id="sfx-row3" src="assets/sfx/interface/drop_003.ogg" data-start="2.71" data-duration="0.19" data-track-index="13" data-volume="0.5"></audio>
+      <audio data-hf-id="hf-ayo6" id="sfx-lock" src="assets/sfx/interface/bong_001.ogg" data-start="3.8" data-duration="0.12" data-track-index="14" data-volume="0.6"></audio>
+      <audio data-hf-id="hf-q37u" id="sfx-click" src="assets/sfx/interface/click_003.ogg" data-start="5.8" data-duration="0.05" data-track-index="15" data-volume="0.75"></audio>
+      <audio data-hf-id="hf-rlwj" id="sfx-swap" src="assets/sfx/ui/click2.ogg" data-start="10.0" data-duration="0.06" data-track-index="16" data-volume="0.45"></audio>
+      <audio data-hf-id="hf-geb5" id="sfx-bars" src="assets/sfx/impact/impactSoft_medium_001.ogg" data-start="13.09" data-duration="0.18" data-track-index="17" data-volume="0.6"></audio>
+      <audio data-hf-id="hf-sbyy" id="sfx-stamp" src="assets/sfx/impact/impactSoft_heavy_003.ogg" data-start="18.54" data-duration="0.54" data-track-index="18" data-volume="0.8"></audio>
+      <audio data-hf-id="hf-d5yl" id="sfx-bell" src="assets/sfx/impact/impactBell_heavy_000.ogg" data-start="20.73" data-duration="1.48" data-track-index="19" data-volume="0.4"></audio>
+    </div>
+
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      const $ = (s) => document.querySelector(s);
+      const $$ = (s) => Array.from(document.querySelectorAll(s));
+
+      const money = (v) => {
+        const [i, d] = Math.abs(v).toFixed(2).split(".");
+        return "−" + i.replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "." + d;
+      };
+      const countTo = (el, target, format, at, duration, ease) => {
+        const state = { v: 0 };
+        tl.fromTo(state, { v: 0 }, {
+          v: target, duration, ease, immediateRender: false,
+          onUpdate: () => { el.textContent = format(state.v); },
+        }, at);
+      };
+      const pct = (v) => v.toFixed(2) + "%";
+
+      // ---------- persistent background ----------
+      tl.fromTo("#rules", { y: 0 }, { y: -128, duration: 22.8, ease: "none" }, 0);
+      tl.fromTo("#glow-drift", { x: 0, y: 0 }, { x: -520, y: 120, duration: 22.8, ease: "sine.inOut" }, 0);
+      tl.fromTo("#topbar", { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "sine.out" }, 0.15);
+      tl.fromTo("#topbar", { opacity: 1 }, { opacity: 0, duration: 0.4, ease: "power1.in", immediateRender: false }, 20.2);
+
+      // Audio-reactive: bass energy breathes the warm glow (pre-extracted, 2-frame steps)
+      const bass = window.AUDIO_BASS.values;
+      const STEP = 2 / window.AUDIO_BASS.fps;
+      const glowState = (v) => ({ opacity: 0.2 + v * 0.3, scale: 1 + v * 0.05 });
+      for (let f = 2; f < bass.length; f += 2) {
+        tl.fromTo("#glow", glowState(bass[f - 2]), { ...glowState(bass[f]), duration: STEP, ease: "none", immediateRender: false }, (f - 2) / window.AUDIO_BASS.fps);
+      }
+      // The retraction scene gets a quieter room; the outro brings the warmth back
+      tl.fromTo("#glow-drift", { opacity: 1 }, { opacity: 0.35, duration: 0.05, ease: "none", immediateRender: false }, 17.2);
+      tl.fromTo("#glow-drift", { opacity: 0.35 }, { opacity: 1, duration: 1.0, ease: "sine.inOut", immediateRender: false }, 20.2);
+
+      // ---------- scene 1 · one payment, three entries ----------
+      tl.fromTo("#s1-card", { x: 90, opacity: 0 }, { x: 0, opacity: 1, duration: 0.8, ease: "expo.out" }, 0.25);
+      tl.fromTo("#s1 .scene-tag", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "sine.out" }, 0.3);
+      tl.fromTo("#s1-l1", { y: 34, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: "power3.out" }, 0.35);
+      tl.fromTo("#s1-ledger-label", { opacity: 0, x: -16 }, { opacity: 1, x: 0, duration: 0.45, ease: "sine.out" }, 1.3);
+      tl.fromTo("#s1-l2", { y: 34, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: "power4.out" }, 1.45);
+      // beat-grid: row 1 at 1.64s, row 2 at 2.19s, row 3 at 2.73s
+      [["#s1-r1", 1.64], ["#s1-r2", 2.19], ["#s1-r3", 2.73]].forEach(([sel, at]) => {
+        tl.fromTo(sel, { x: -70, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease: "circ.out" }, at);
+      });
+      const links = $$("#s1-links .link");
+      const linkLengths = links.map((p) => p.getTotalLength());
+      links.forEach((p, i) => {
+        p.style.strokeDasharray = `${linkLengths[i]}`;
+        p.style.strokeDashoffset = `${linkLengths[i]}`;
+      });
+      tl.fromTo("#s1-links .node", { opacity: 0, scale: 0, transformOrigin: "50% 50%" }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2)", stagger: 0.05 }, 2.95);
+      links.forEach((p, i) => {
+        tl.fromTo(p, { strokeDashoffset: linkLengths[i] }, { strokeDashoffset: 0, duration: 0.55, ease: "power2.inOut" }, 3.0 + i * 0.06);
+      });
+      tl.fromTo("#s1-sum-rule", { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: "power2.out" }, 3.0);
+      tl.fromTo("#s1-sum-row", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "sine.out" }, 3.05);
+      countTo($("#s1-sum-val"), -2152411.81, money, 3.1, 0.65, "power2.out");
+      // match lock on beat 3.82s
+      tl.fromTo("#s1-badge", { scale: 1.35, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.28, ease: "power4.out" }, 3.82);
+      tl.fromTo("#s1-card", { borderColor: "#2f2a25" }, { borderColor: "#f97316", duration: 0.3, ease: "power1.out", immediateRender: false }, 3.82);
+      tl.fromTo("#s1-card-amt", { color: "#f4efe9" }, { color: "#fdba74", duration: 0.3, ease: "power1.out" }, 3.82);
+
+      // S1 -> S2: blur crossfade with a slight push
+      tl.fromTo("#s1-inner", { scale: 1, filter: "blur(0px)", opacity: 1 }, { scale: 1.04, filter: "blur(10px)", opacity: 0, duration: 0.5, ease: "power2.inOut", immediateRender: false }, 4.4);
+      tl.fromTo("#s2-inner", { scale: 0.97, filter: "blur(10px)", opacity: 0 }, { scale: 1, filter: "blur(0px)", opacity: 1, duration: 0.5, ease: "power2.inOut" }, 4.5);
+
+      // ---------- scene 2 · the app ----------
+      tl.fromTo("#s2-summary", { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.45, ease: "sine.out" }, 6.0);
+      tl.fromTo("#s2 .tr.row", { opacity: 0, y: -10 }, { opacity: 1, y: 0, duration: 0.3, ease: "power2.out", stagger: 0.07 }, 6.15);
+      // cursor travels to the button and clicks at 5.8s
+      tl.fromTo("#s2-cursor", { x: 1600, y: 1010, opacity: 0 }, { x: 1180, y: 420, opacity: 1, duration: 0.85, ease: "power2.inOut" }, 4.9);
+      tl.to("#s2-cursor", { scale: 0.84, duration: 0.08, ease: "power2.in", yoyo: true, repeat: 1, transformOrigin: "0% 0%" }, 5.8);
+      tl.to("#s2-btn", { scale: 0.985, duration: 0.08, ease: "power2.in", yoyo: true, repeat: 1 }, 5.8);
+      tl.fromTo("#s2-btn", { backgroundColor: "#ea580c" }, { backgroundColor: "#c2410c", duration: 0.08, ease: "power1.in", yoyo: true, repeat: 1, immediateRender: false }, 5.8);
+      tl.fromTo("#s2-ripple", { scale: 0, opacity: 0.9 }, { scale: 2.6, opacity: 0, duration: 0.6, ease: "power2.out", immediateRender: false }, 5.82);
+      tl.fromTo("#s2-cursor", { opacity: 1, x: 1180 }, { opacity: 0, x: 1250, duration: 0.4, ease: "power1.in", immediateRender: false }, 6.4);
+      // slow push toward the summary while the table holds
+      tl.fromTo("#s2-win", { scale: 1, transformOrigin: "50% 45%" }, { scale: 1.03, duration: 2.8, ease: "sine.inOut" }, 6.2);
+      // beat 7.64s: the hook's batch row lights up in the real table
+      tl.fromTo("#s2-hl", { opacity: 0 }, { opacity: 1, duration: 0.35, ease: "power2.out", immediateRender: false }, 7.64);
+
+      // S2 -> S3: push slide left
+      tl.fromTo("#s2-inner", { x: 0, opacity: 1 }, { x: -240, opacity: 0, duration: 0.45, ease: "power3.in", immediateRender: false }, 9.0);
+      tl.fromTo("#s3-inner", { x: 240, opacity: 0 }, { x: 0, opacity: 1, duration: 0.55, ease: "power3.out" }, 9.05);
+
+      // ---------- scene 3 · a break, explained ----------
+      tl.fromTo("#s3-head", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.75, ease: "expo.out" }, 9.15);
+      tl.fromTo("#s3-a", { x: 60, opacity: 0 }, { x: 0, opacity: 1, duration: 0.55, ease: "power3.out" }, 9.25);
+      tl.fromTo("#s3-b", { x: 60, opacity: 0 }, { x: 0, opacity: 1, duration: 0.55, ease: "power2.out" }, 9.4);
+      tl.fromTo("#s3 .swap .hl", { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "power2.out", stagger: 0.06 }, 10.0);
+      tl.fromTo("#s3 .swap-t", { color: "#f4efe9" }, { color: "#f87171", duration: 0.2, ease: "power1.out" }, 10.0);
+      tl.fromTo("#s3-chip", { opacity: 0, scale: 0.92, transformOrigin: "0% 50%" }, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(1.6)" }, 10.45);
+      tl.fromTo("#s3-hint-label", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "sine.out" }, 10.8);
+      tl.fromTo("#s3-hint-text", { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.65, ease: "steps(43)" }, 10.85);
+      tl.fromTo("#s3-panel", { y: 0 }, { y: -12, duration: 3.2, ease: "sine.inOut" }, 9.6);
+      tl.fromTo("#s3-strip", { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "sine.out" }, 11.0);
+      tl.fromTo("#s3 .brk", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.35, ease: "power2.out", stagger: 0.08 }, 11.1);
+
+      // S3 -> S4: blur crossfade
+      tl.fromTo("#s3-inner", { scale: 1, filter: "blur(0px)", opacity: 1 }, { scale: 1.03, filter: "blur(10px)", opacity: 0, duration: 0.45, ease: "power2.inOut", immediateRender: false }, 12.8);
+      tl.fromTo("#s4-inner", { scale: 0.97, filter: "blur(10px)", opacity: 0 }, { scale: 1, filter: "blur(0px)", opacity: 1, duration: 0.45, ease: "power2.inOut" }, 12.85);
+
+      // ---------- scene 4 · someone else's data ----------
+      tl.fromTo("#s4-eyebrow", { opacity: 0, x: -24 }, { opacity: 1, x: 0, duration: 0.8, ease: "power2.out" }, 12.95);
+      tl.fromTo("#s4-head", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: "expo.out" }, 13.0);
+      tl.fromTo(["#s4-r1", "#s4-r2"], { opacity: 0 }, { opacity: 1, duration: 0.35, ease: "sine.out", stagger: 0.08 }, 13.0);
+      // beat-locked: 13.11s, bars start growing
+      tl.fromTo("#s4-f1", { scaleX: 0 }, { scaleX: 0.8865, duration: 1.3, ease: "expo.out" }, 13.11);
+      countTo($("#s4-v1"), 88.65, pct, 13.11, 1.3, "expo.out");
+      tl.fromTo("#s4-f2", { scaleX: 0 }, { scaleX: 0.6245, duration: 1.3, ease: "expo.out" }, 13.19);
+      countTo($("#s4-v2"), 62.45, pct, 13.19, 1.3, "expo.out");
+      tl.fromTo("#s4-split", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 14.3);
+      tl.fromTo("#s4-f3", { scaleX: 0 }, { scaleX: 0.7043, duration: 1.0, ease: "expo.out" }, 14.45);
+      countTo($("#s4-v3"), 70.43, pct, 14.45, 1.0, "expo.out");
+      tl.fromTo("#s4-head", { x: 0 }, { x: 14, duration: 3.4, ease: "sine.inOut", immediateRender: false }, 13.8);
+
+      // ---------- scene 5 · the retraction (hard cut at 17.2s) ----------
+      tl.fromTo("#s5 .scene-tag", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "sine.out" }, 17.25);
+      tl.fromTo("#s5-line", { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power2.out" }, 17.3);
+      // beat-locked: stamp lands at 18.56s
+      tl.fromTo("#s5-stamp", { scale: 1.5, rotation: -14, opacity: 0 }, { scale: 1, rotation: -5, opacity: 1, duration: 0.14, ease: "power4.in" }, 18.42);
+      tl.fromTo("#s5-retired", { opacity: 0, x: -24 }, { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" }, 19.0);
+      tl.fromTo("#s5-inner", { x: 0 }, { keyframes: [{ x: -8, duration: 0.05 }, { x: 6, duration: 0.06 }, { x: -3, duration: 0.06 }, { x: 0, duration: 0.07 }], ease: "none", immediateRender: false }, 18.56);
+      tl.fromTo("#s5-foot", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "sine.out" }, 19.15);
+
+      // S5 -> S6: gentle crossfade
+      tl.fromTo("#s5-inner", { opacity: 1 }, { opacity: 0, duration: 0.6, ease: "sine.inOut", immediateRender: false }, 20.2);
+      tl.fromTo("#s6-inner", { opacity: 0 }, { opacity: 1, duration: 0.6, ease: "sine.inOut" }, 20.2);
+
+      // ---------- scene 6 · outro ----------
+      tl.fromTo("#s6-mark", { clipPath: "inset(-12% 100% -12% -2%)", x: -20 }, { clipPath: "inset(-12% -6% -12% -2%)", x: 0, duration: 0.75, ease: "expo.out" }, 20.3);
+      tl.fromTo("#s6-mark span", { scale: 1 }, { scale: 1.02, duration: 1.8, ease: "sine.out" }, 21.0);
+      tl.fromTo("#s6-rule", { scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: "power3.inOut" }, 20.8);
+      tl.fromTo("#s6-tag", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.55, ease: "sine.out" }, 20.95);
+      tl.fromTo("#s6-tiers > *", { opacity: 0, x: 30 }, { opacity: 1, x: 0, duration: 0.4, ease: "power2.out", stagger: 0.08 }, 21.0);
+      tl.fromTo("#s6-url", { opacity: 0 }, { opacity: 1, duration: 0.45, ease: "power1.out" }, 21.15);
+
+      // Music fades under the held wordmark
+      const BGM_GAIN = 0.3;
+      tl.fromTo("#bgm", { volume: BGM_GAIN }, {
+        keyframes: [{ volume: BGM_GAIN, duration: 21.6, ease: "none" }, { volume: 0, duration: 1.2, ease: "sine.in" }],
+      }, 0);
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,19 @@
+{
+  "duration": 22.8,
+  "assertions": [
+    { "kind": "appearsBy", "selector": "#s1-l1", "bySec": 1.2 },
+    { "kind": "before", "a": "#s1-l1", "b": "#s1-l2" },
+    { "kind": "before", "a": "#s1-r1", "b": "#s1-r3" },
+    { "kind": "appearsBy", "selector": "#s1-badge", "bySec": 4.2 },
+    { "kind": "appearsBy", "selector": "#s2-summary", "bySec": 6.8 },
+    { "kind": "before", "a": "#s3-a", "b": "#s3-chip" },
+    { "kind": "appearsBy", "selector": "#s4-head", "bySec": 13.9 },
+    { "kind": "before", "a": "#s5-line", "b": "#s5-stamp" },
+    { "kind": "appearsBy", "selector": "#s5-stamp", "bySec": 18.8 },
+    { "kind": "appearsBy", "selector": "#s6-mark", "bySec": 21.2 },
+    { "kind": "staysInFrame", "selector": "#s1-r1" },
+    { "kind": "staysInFrame", "selector": "#s1-r3" },
+    { "kind": "staysInFrame", "selector": "#s2-cursor" },
+    { "kind": "keepsMoving" }
+  ]
+}

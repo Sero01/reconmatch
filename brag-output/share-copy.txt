@@ -1,0 +1,2 @@
+ReconMatch pairs bank-statement lines with ledger entries using fixed rules and no model. On 32,048 held-out BenchRec records it gets 88.65% exactly right, against 62.45% for the published ChatGPT matcher. I set a 99.8% auto-match bar before that run and missed it, so that claim is retired.
+reconmatch-aa9c.onrender.com
